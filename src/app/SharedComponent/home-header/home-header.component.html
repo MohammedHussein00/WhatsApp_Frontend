@@ -1,0 +1,140 @@
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light p-3" style="box-shadow:0 1px 9px 0 #a3a0a0;padding: 40px 31px!important;" [ngClass]="{'fixed-top': isFixed}">
+  <a class=" col-lg-2" >
+      <img style="width: 100px;" src="assets/Logo.png" alt="">
+  </a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="menu collapse navbar-collapse  justify-content-between" id="navbarSupportedContent" >
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link" routerLink="/home">Home</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link" routerLink="/agents">Agents</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link" routerLink="/gpt">COBRAGPT</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link" routerLink="/projects">Projects</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link" routerLink="/furniture">Furniture</a>
+      </li>
+    </ul>
+
+    <div class="col-md-3 col-sm-3 col-xs-2 d-flex justify-content-end">
+
+      <div class="user" style="padding:0.5rem" *ngIf="!isAuthenticated">
+       <span class="sign" routerLink="/sign-up" >Sign up</span> |
+       <span class="sign" routerLink="/login" >Sign in</span>
+      </div>
+
+      <div *ngIf="isAuthenticated" style="position: relative;margin-right: 30px;">
+        <i class="bi bi-envelope" style="font-size: 25px;"
+        [ngStyle]="global.night ? {'color': '#8391a2'} : {'color': '#6c757d'}"
+
+        ></i>
+        <span class="indicator">4</span>
+      </div>
+
+      <div class="dropdown-center " *ngIf="isAuthenticated">
+        <div class="d-flex align-items-center profile" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <img [src]="imgUrl!==''?imgUrl:'/assets/profile1.png'" alt="" class="rounded-img rounded-circle" style="width: 30px;height: 30px;">
+          <p
+          [ngStyle]="global.night ? {'color': '#8391a2'} : {'color': '#6c757d'}"
+
+          style="margin-left: 10px;">Profile</p>
+          <svg style="    width: 30px;transform: rotate(90deg);" width="10" height="15" viewBox="0 0 10 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+            [ngStyle]="night?{'fill':'#8391a2'}:{'fill':'#6c757d'}"
+            d="M8.74708 6.65008C9.13761 7.0406 9.13761 7.67377 8.74708 8.06429L2.38312 14.4283C1.9926 14.8188 1.35943 14.8188 0.968909 14.4283C0.578385 14.0377 0.578385 13.4046 0.968909 13.014L6.62576 7.35719L0.968909 1.70033C0.578385 1.30981 0.578385 0.676644 0.968909 0.286119C1.35943 -0.104405 1.9926 -0.104405 2.38312 0.286119L8.74708 6.65008ZM7.00002 6.35719L8.03998 6.35719L8.03998 8.35719L7.00002 8.35719L7.00002 6.35719Z" />
+            </svg>
+
+        </div>
+        <ul class="dropdown-menu" style="top:110%;right:0;left:auto;width: 280px!important;">
+          <p style="padding: 0 10px;text-overflow:ellipsis;">{{name}}</p>
+          <hr>
+          <li class="popLi" routerLink="/profile"><span>Personal profile </span><i class="bi bi-person-circle"></i> </li>
+          <li class="popLi"routerLink="/profile"><span>Edit profile</span><i class="bi bi-pencil-square"></i></li>
+          <li class="popLi"><span>Seting</span><i class="bi bi-gear"></i></li>
+          <li class="popLi" (click)="logout()"><span>Logout</span><i class="bi bi-box-arrow-in-right"></i></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+  <div class="offcanvas-header" style="display: flex;justify-content: flex-end;padding-top: 29px;padding-right: 20px;">
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <span style="
+    color: #44474a;
+    font-family: sans-serif;
+    font-size: 12px;
+    font-weight: lighter;
+">Main</span>
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" routerLink="/Home" routerLinkActive="active"><i class="pi pi-home " style="margin-right: 3px;"></i> Home </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/agents" routerLinkActive="active"><i class="pi pi-users " style="margin-right: 3px;"></i>Agents</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link"  routerLink="/gpt" routerLinkActive="active">COBRAGPT</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"  routerLink="/gpt" routerLinkActive="active">Projects</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"  routerLink="/gpt" routerLinkActive="active">
+          <svg 
+          routerLink="/agents" routerLinkActive="active"
+          style="margin-right: 3px;" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M120-40v-880h80v80h560v-80h80v880h-80v-80H200v80h-80Zm80-480h80v-160h240v160h240v-240H200v240Zm0 320h240v-160h240v160h80v-240H200v240Zm160-320h80v-80h-80v80Zm160 320h80v-80h-80v80ZM360-520h80-80Zm160 320h80-80Z"/></svg>
+          Furnutre</a>
+      </li>
+    </ul>
+    <div>
+      <span style="
+      color: #44474a;
+      font-family: sans-serif;
+      font-size: 12px;
+      font-weight: lighter;
+  ">Profile</span>
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link"  routerLink="/login" routerLinkActive="active">Sign in</a>
+        </li>
+        <li>
+          <a class="nav-link"  routerLink="/sign-up" routerLinkActive="active">Create new Account</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

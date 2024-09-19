@@ -1,0 +1,634 @@
+<div class="cobra-search" style="padding: 60px 20px 20px">
+  <div>
+    <div class="filters row">
+      <div class="card flex" style="border: none">
+        <div
+          class="card flex justify-content-center"
+          style="border: none !important"
+        >
+          <div
+            style="
+              background-color: #f3f4f6;
+              padding: 7px;
+              border-radius: 5px;
+              margin-right: 20px;
+            "
+          >
+            <button
+              class="btn btn-embossed mt-0"
+              [ngStyle]="{
+                'background-color': statusActive === 1 ? 'white' : 'inherit'
+              }"
+              (click)="filterByStatus(1)"
+            >
+              For Buy
+            </button>
+            <button
+              class="btn btn-embossed mt-0"
+              [ngStyle]="{
+                'background-color': statusActive === 2 ? 'white' : 'inherit'
+              }"
+              (click)="filterByStatus(2)"
+            >
+              For Rent
+            </button>
+          </div>
+        </div>
+
+        <form style="width: 50%" class="col-lg-5">
+          <mat-form-field class="example-chip-list w-100">
+            <mat-chip-grid #chipGrid aria-label="Locations selection">
+              <mat-chip-row
+                *ngFor="let location of Locations"
+                (removed)="remove(location)"
+              >
+                {{ location }}
+                <button matChipRemove [attr.aria-label]="'remove ' + location">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip-row>
+            </mat-chip-grid>
+            <input
+              placeholder="Enter location..."
+              #fruitInput
+              [formControl]="LocationsCtrl"
+              [matChipInputFor]="chipGrid"
+              [matAutocomplete]="auto"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="add($event)"
+            />
+            <mat-autocomplete
+              #auto="matAutocomplete"
+              (optionSelected)="selected($event)"
+            >
+              <mat-option
+                *ngFor="let location of filteredLocations | async"
+                [value]="location"
+              >
+                {{ location }}
+              </mat-option>
+            </mat-autocomplete>
+            <!-- SVG and other content -->
+          </mat-form-field>
+        </form>
+
+      </div>
+    </div>
+
+    <div class="filter-category">
+      <p-multiSelect
+        class="col-lg-3"
+        [options]="residentials"
+        [(ngModel)]="selectedresidentials"
+        variant="filled"
+        optionLabel="name"
+        placeholder="Select Cities"
+      />
+
+      <p-treeSelect
+        class="w-full md:w-20rem col-lg-3"
+        containerStyleClass="w-full"
+        [(ngModel)]="selectedNodes"
+        [options]="NodeService"
+        display="chip"
+        variant="filled"
+        [metaKeySelection]="false"
+        selectionMode="checkbox"
+        placeholder="Beds & Baths"
+        (onNodeSelect)="sortByBaths_Beds()"
+        (onNodeUnselect)="sortByBaths_Beds()"
+      />
+
+      <div class="dropdown col-lg-3">
+        <button
+          style="
+            background: #f3f4f6;
+            border-color: #d2d2d2;
+            color: black;
+            padding: 12px;
+            margin: 0;
+          "
+          class="btn btn-secondary dropdown-toggle"
+          type="button"
+          id="dropdownMenuButton1"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          {{
+            minPrice === 0
+              ? "Min Price"
+              : "Min Price: " +
+                (minPrice | currency : "EGP " : "symbol" : "1.0-0")
+          }}
+        </button>
+        <ul
+          style="height: 35px"
+          class="dropdown-menu"
+          aria-labelledby="dropdownMenuButton1"
+          (click)="$event.stopPropagation()"
+        >
+          <p-inputNumber
+            [(ngModel)]="minPrice"
+            [showButtons]="true"
+            buttonLayout="horizontal"
+            inputId="horizontal"
+            spinnerMode="horizontal"
+            [step]="1"
+            decrementButtonClass="p-button-secondary"
+            incrementButtonClass="p-button-secondary"
+            incrementButtonIcon="pi pi-plus"
+            decrementButtonIcon="pi pi-minus"
+            mode="currency"
+            currency="EGP"
+          />
+        </ul>
+      </div>
+
+      <div class="dropdown col-lg-3">
+        <button
+          style="
+            background: #f3f4f6;
+            border-color: #d2d2d2;
+            color: black;
+            padding: 12px;
+            margin: 0;
+          "
+          class="btn btn-secondary dropdown-toggle"
+          type="button"
+          id="dropdownMenuButton1"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          {{
+            maxPrice === 0
+              ? "Max Price"
+              : "Max Price: " +
+                (maxPrice | currency:'EGP ': 'symbol':'1.0-0')
+          }}
+        </button>
+        <ul
+          class="dropdown-menu"
+          aria-labelledby="dropdownMenuButton1"
+          (click)="$event.stopPropagation()"
+        >
+          <p-inputNumber
+            [(ngModel)]="maxPrice"
+            [showButtons]="true"
+            buttonLayout="horizontal"
+            inputId="horizontal"
+            spinnerMode="horizontal"
+            [step]="1"
+            decrementButtonClass="p-button-secondary"
+            incrementButtonClass="p-button-secondary"
+            incrementButtonIcon="pi pi-plus"
+            decrementButtonIcon="pi pi-minus"
+            mode="currency"
+            [currency]="'EGP'"
+            (onChange)="filterByMaxPrice()"
+          />
+        </ul>
+      </div>
+
+    </div>
+    <div class="card flex mt-2">
+      <p-dropdown
+        class="col-lg-3"
+        [options]="Agents"
+        [(ngModel)]="selectedAgents"
+        optionLabel="name"
+        [filter]="true"
+        filterBy="name"
+        variant="filled"
+        [showClear]="true"
+        placeholder="Agents"
+      >
+        <ng-template pTemplate="selectedItem" let-selectedOption>
+          <div class="flex align-items-center gap-2">
+            <div>{{ selectedOption.name }}</div>
+          </div>
+        </ng-template>
+        <ng-template let-country pTemplate="item">
+          <div class="d-flex align-items-center gap-2">
+            <img
+              src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+              [class]="'flag flag-' + country.code.toLowerCase()"
+              style="width: 18px"
+            />
+            <div>{{ country.name }}</div>
+          </div>
+        </ng-template>
+      </p-dropdown>
+      <p-dropdown
+        class="col-lg-3"
+        [options]="Agents"
+        [(ngModel)]="selectedAgents"
+        optionLabel="name"
+        [filter]="true"
+        variant="filled"
+        filterBy="name"
+        [showClear]="true"
+        placeholder="Agencies"
+      >
+        <ng-template pTemplate="selectedItem" let-selectedOption>
+          <div class="flex align-items-center gap-2">
+            <div>{{ selectedOption.name }}</div>
+          </div>
+        </ng-template>
+        <ng-template let-country pTemplate="item">
+          <div class="d-flex align-items-center gap-2">
+            <img
+              src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+              [class]="'flag flag-' + country.code.toLowerCase()"
+              style="width: 18px"
+            />
+            <div>{{ country.name }}</div>
+          </div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+
+    <div class="d-flex justify-content-end mt-3">
+      <div class="save-search">
+        {{ saveSearch }}
+      </div>
+    </div>
+  </div>
+
+  <!-- search.component.html -->
+
+  <div class="container">
+    <div class="row mt-4">
+      <div class="col-lg-9 col-md-12">
+        <div>
+          <div class="filter-category justify-content-between mb-3">
+            <h4>Properties for sale in Egypt</h4>
+            <div class="filter-category justify-content-between w-50">
+              <div class="dropdown-wrapper w-50">
+                <p-dropdown
+                [options]="orders"
+                [(ngModel)]="selectedorders"
+                optionLabel="name"
+                [showClear]="true"
+                placeholder="Sort"
+                (onChange)="sortByOrders()"
+              >
+              </p-dropdown>
+              </div>
+
+              <div class="all-ready-offPlan">
+                <!-- Button for List View -->
+                <div
+                  class="all-ready-offPlan-child"
+                  [ngClass]="{
+                    'all-ready-offPlan-child-active': !mapListActive
+                  }"
+                  (click)="toggleMapList(false)"
+                >
+                  <span class="filter-icon">
+                    <svg
+                      [ngClass]="{
+                        'all-ready-offPlan-child-active': !mapListActive
+                      }"
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24px"
+                      viewBox="0 -960 960 960"
+                      width="24px"
+                      fill="#e8eaed"
+                    >
+                      <path
+                        d="M280-600v-80h560v80H280Zm0 160v-80h560v80H280Zm0 160v-80h560v80H280ZM160-600q-17 0-28.5-11.5T120-640q0-17 11.5-28.5T160-680q17 0 28.5 11.5T200-640q0 17-11.5 28.5T160-600Zm0 160q-17 0-28.5-11.5T120-480q0-17 11.5-28.5T160-520q17 0 28.5 11.5T200-480q0 17-11.5 28.5T160-440Zm0 160q-17 0-28.5-11.5T120-320q0-17 11.5-28.5T160-360q17 0 28.5 11.5T200-320q0 17-11.5 28.5T160-280Z"
+                      />
+                    </svg>
+                  </span>
+                  List
+                </div>
+
+                <!-- Button for Map View -->
+                <div
+                  class="all-ready-offPlan-child"
+                  [ngClass]="{
+                    'all-ready-offPlan-child-active': mapListActive
+                  }"
+                  (click)="toggleMapList(true)"
+                >
+                  <span class="filter-icon">
+                    <svg
+                      [ngClass]="{
+                        'all-ready-offPlan-child-active': mapListActive
+                      }"
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24px"
+                      viewBox="0 -960 960 960"
+                      width="24px"
+                      style="fill: var(--icon-color)"
+                      fill="#e8eaed"
+                    >
+                      <path
+                        d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 294q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z"
+                      />
+                    </svg>
+                  </span>
+                  Map
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-9">
+        <div class="card col-lg-9" *ngFor="let property of filteredProperties">
+          <img
+            [src]="property.imageSrc"
+            class="card-img-top"
+            alt="Property Image"
+          />
+          <div class="card-body">
+            <h5 class="card-title">
+              <small style="font-size: 0.7em">AED</small> {{ property.price }}
+            </h5>
+            <div class="card-text">
+              <p class="type">{{ property.type }}</p>
+              <span class="icon-text">
+                <ng-container
+                  *ngFor="let icon of property.icons; let i = index"
+                >
+                  <svg
+                    *ngIf="i === 1"
+                    class="room"
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 -960 960 960"
+                    width="24px"
+                    fill="#e8eaed"
+                  >
+                    <path
+                      d="M280-600q-33 0-56.5-23.5T200-680q0-33 23.5-56.5T280-760q33 0 56.5 23.5T360-680q0 33-23.5 56.5T280-600ZM200-80q-17 0-28.5-11.5T160-120q-33 0-56.5-23.5T80-200v-240h120v-30q0-38 26-64t64-26q20 0 37 8t31 22l56 62q8 8 15.5 15t16.5 13h274v-326q0-14-10-24t-24-10q-6 0-11.5 2.5T664-790l-50 50q5 17 2 33.5T604-676L494-788q14-9 30-11.5t32 3.5l50-50q16-16 36.5-25t43.5-9q48 0 81 33t33 81v326h80v240q0 33-23.5 56.5T800-120q0 17-11.5 28.5T760-80H200Zm-40-120h640v-160H160v160Zm0 0h640-640Z"
+                    ></path>
+                  </svg>
+                  <svg
+                    *ngIf="i === 0"
+                    class="room"
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 -960 960 960"
+                    width="24px"
+                    fill="#e8eaed"
+                  >
+                    <path
+                      d="M80-200v-240q0-27 11-49t29-39v-112q0-50 35-85t85-35h160q23 0 43 8.5t37 23.5q17-15 37-23.5t43-8.5h160q50 0 85 35t35 85v112q18 17 29 39t11 49v240h-80v-80H160v80H80Zm440-360h240v-80q0-17-11.5-28.5T720-680H560q-17 0-28.5 11.5T520-640v80Zm-320 0h240v-80q0-17-11.5-28.5T400-680H240q-17 0-28.5 11.5T200-640v80Zm-40 200h640v-80q0-17-11.5-28.5T760-480H200q-17 0-28.5 11.5T160-440v80Zm640 0H160h640Z"
+                    />
+                  </svg>
+
+                  <p class="number">{{ icon.number }}</p>
+                </ng-container>
+              </span>
+              <span class="icon-text">
+                <p class="type">Area</p>
+                :
+                <p class="number">{{ property.area }}</p>
+                sqft
+              </span>
+            </div>
+            <p class="text-description">{{ property.description }}</p>
+            <div class="card-text">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+                fill="#e8eaed"
+              >
+                <path
+                  d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 294q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z"
+                ></path>
+              </svg>
+              <p class="location-title">{{ property.location }}</p>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <button
+                  type="button"
+                  class="contact-btn btn btn-primary pr-3"
+                  data-bs-toggle="modal"
+                  [attr.data-bs-target]="'#callModal' + property.id"
+                >
+                  <i class="bi bi-telephone"></i> Call
+                </button>
+                <button
+                  type="button"
+                  class="contact-btn btn btn-primary pr-3"
+                  data-bs-toggle="modal"
+                  [attr.data-bs-target]="'#emailModal' + property.id"
+                >
+                  <i class="bi bi-envelope"></i> Email
+                </button>
+                <button
+                  type="button"
+                  class="contact-btn btn btn-secondary pr-3"
+                  data-bs-toggle="modal"
+                  [attr.data-bs-target]="'#whatsappModal' + property.id"
+                >
+                  <i class="bi bi-whatsapp"></i> WhatsApp
+                </button>
+              </div>
+              <div class="Agent col-2">
+                <img
+                  style="width: 100%"
+                  [src]="property.agentLogo"
+                  alt="Agent Logo"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="col-lg-3 col-md-2 mb-4">
+          <div class="card">
+            <img
+              src="https://www.bayut.com/en/dubai/community/al-mamazar/"
+              class="card-img-top"
+              alt="Al Mamzar"
+            />
+            <div class="card-body">
+              <h5 class="card-title">Al Mamzar</h5>
+              <p class="card-text">See the community attractions and lifestyle</p>
+            </div>
+          </div>
+          <div class="card mt-3">
+            <div class="card-body">
+              <h5 class="card-title">Near Egyptian Trade Center</h5>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">Majestic Tower Properties</li>
+                <li class="list-group-item">Danat Al Khan Tower Properties</li>
+                <li class="list-group-item">Al Mamzar 1 Properties</li>
+                <li class="list-group-item">Faradis Tower Properties</li>
+                <li class="list-group-item">Narjes Tower Properties</li>
+              </ul>
+              <a href="#" class="btn btn-link">View More</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="card flex justify-content-center">
+      <div class="row mt-4">
+        <div class="col-12 d-flex justify-content-center">
+          <p-paginator
+            [first]="first"
+            [rows]="rows"
+            [totalRecords]="totalRecords"
+            [rowsPerPageOptions]="rowsPerPageOptions"
+            (onPageChange)="onPageChange($event)"
+          ></p-paginator>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <ng-container *ngFor="let property of properties">
+    <!-- Modal for Call -->
+    <div
+      class="modal fade"
+      [id]="'callModal' + property.id"
+      tabindex="-1"
+      [attr.aria-labelledby]="'callModal' + property.id + 'Label'"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" [id]="'callModal' + property.id + 'Label'">
+              Call
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              You are about to call the property agent. Do you want to proceed?
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary" (click)="callAgent()">
+              Call Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for Email -->
+    <div
+      class="modal fade"
+      [id]="'emailModal' + property.id"
+      tabindex="-1"
+      [attr.aria-labelledby]="'emailModal' + property.id + 'Label'"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" [id]="'emailModal' + property.id + 'Label'">
+              Send Email
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              You are about to send an email to the property agent. Do you want
+              to proceed?
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary" (click)="sendEmail()">
+              Send Email
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for WhatsApp -->
+    <div
+      class="modal fade"
+      [id]="'whatsappModal' + property.id"
+      tabindex="-1"
+      [attr.aria-labelledby]="'whatsappModal' + property.id + 'Label'"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5
+              class="modal-title"
+              [id]="'whatsappModal' + property.id + 'Label'"
+            >
+              Send WhatsApp Message
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              You are about to send a WhatsApp message to the property agent. Do
+              you want to proceed?
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="sendWhatsApp()"
+            >
+              Send WhatsApp
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

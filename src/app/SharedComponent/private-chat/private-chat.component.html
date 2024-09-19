@@ -1,0 +1,493 @@
+<div class="row w-100 m-auto" style="height: 100vh;padding: 0;">
+  <!-- Chat users column -->
+  <div class="col-xxl-4 col-xl-5 order-xl-1 p-0" style="border-radius: 0;height: 100%;padding-right: 12px;">
+    <div class="card">
+      <div class="card-body p-0">
+        <!-- Tabs for different user categories -->
+
+        <p-avatar
+        icon="bi bi-chat-left-dots-fill"
+        styleClass="mr-2"
+        [style]="{ 'background-color': 'var(--main-primary)', color: 'white','position':'absolute','bottom':'30px','right':'20px','cursor':'pointer','z-index':'400'}"
+        severity="danger"
+        (click)="dialogShow()"
+         />
+
+        <ul
+          class="nav nav-tabs nav-bordered"
+          style="border-bottom: 2px solid"
+          role="tablist"
+        >
+          <li class="nav-item" role="presentation">
+            <a
+              (click)="switchTab('allUsers')"
+              [class.active]="selectedTab === 'allUsers'"
+              class="nav-link py-2"
+              role="tab"
+            >
+              Chats
+            </a>
+          </li>
+          <!-- Add more tabs as needed -->
+        </ul>
+
+        <!-- Search box -->
+        <div class="app-search">
+          <form>
+            <div class="mb-2 w-100 position-relative">
+              <input
+                type="search"
+                class="form-control"
+                placeholder="People, groups &amp; messages..."
+                [(ngModel)]="searchKeyword" [ngModelOptions]="{standalone: true}"
+              />
+              <i
+                class="bi bi-search"
+                style="color: #8a96b6; position: absolute; left: 9px; top: 9px"
+              ></i>
+            </div>
+          </form>
+        </div>
+
+        <!-- List of users based on selected tab -->
+        <div
+          class="tab-content"
+          style="overflow: hidden; overflow-y: scroll; height: 88vh;position:relative;"
+        >
+        <div *ngIf="users.length===0" style="display: flex;margin: auto;position: absolute;height: 100%;text-align: center;width: 100%;justify-content: center;flex-direction: column;">
+          <i class="bi bi-info-circle"></i>
+          there is no chats
+        </div>
+        <div
+        *ngIf="selectedTab === 'allUsers'"
+        class="tab-pane show active card-body pb-0"
+        id="allUsers"
+        >
+
+        <div
+        *ngFor="let user of users"
+        [ngStyle]="
+                user?.id === selectedUser?.id
+                  ? { 'background-color': 'rgb(30 38 55)' }
+                  : { 'background-color': 'var(--main-bg)' }
+              "
+              class="d-flex align-items-start mt-1 p-2 cursor-pointer"
+              (click)="selectUser(user)"
+              >
+
+              <img
+                [src]="user.imageUrl ? user.imageUrl : 'assets/profile1.png'"
+                class="me-2 rounded-circle"
+                height="48"
+              />
+              <div class="w-100 overflow-hidden">
+                <div class="d-flex justify-content-between">
+                  <h5 class="mt-0 mb-0 font-14">
+                    {{ user.name }}
+                  </h5>
+                  <span class="float-end text-muted font-12">{{
+                    getLastMessageTime(user)
+                  }}</span>
+                </div>
+                <p class="mt-1 mb-0 text-muted font-14" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
+                  <span class="w-75">{{ getLastMessage(user) }}</span>
+                  <span
+                    class="w-25 float-end text-end"
+                    *ngIf="countUnread(user) > 0"
+                  >
+                    <span class="badge badge-danger-lighten">{{
+                      countUnread(user)
+                    }}</span>
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- Add similar structures for other tab contents -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat area column -->
+  <div class="col-xxl-8 col-xl-7 order-xl-1 p-0" style="border-radius: 0;height: 100%;">
+    <div class="card">
+      <div class="card-body px-0 pb-0 menu-container"
+      (contextmenu)="showContextMenu($event)">
+      <div class="context-menu" [ngClass]="{'visible': displayMenu}" [ngStyle]="{'left.px': menuPosition.x, 'top.px': menuPosition.y}">
+
+        <p-card   [style]="{ display: 'flex' }">
+          <div class="popup-header" style="display:flex;gap:10px;">
+            <i class="pi pi-times"  style="font-size:13px" ></i>
+            <p  >Close Chat</p>
+          </div>
+          <div class="popup-header" style="display:flex;gap:10px;">
+            <i style="font-size:13px" class="pi pi-check-square" ></i>
+            <p  >Select message</p>
+          </div>
+          <div class="popup-header" style="display:flex;gap:10px;">
+            <i class="pi pi-times"  style="font-size:13px" ></i>
+            <p  >Close Chat</p>
+          </div>
+        </p-card>
+
+      </div>
+
+
+        <ul
+          class="conversation-list py-0 simplebar-scrollable-y "
+          data-simplebar="init"
+          style="height: 85.7vh;overflow: hidden;overflow-y: auto;padding: 0;"
+        >
+
+          <div class="simplebar-wrapper">
+            <div class="simplebar-height-auto-observer-wrapper">
+              <div class="simplebar-height-auto-observer"></div>
+            </div>
+            <div class="simplebar-mask">
+              <div class="simplebar-offset" style="right: 0px; bottom: 0px">
+                <div
+                  class="simplebar-content-wrapper "
+                  tabindex="0"
+                  role="region"
+                  aria-label="scrollable content"
+                >
+                  <div class="simplebar-content">
+
+
+
+
+
+                    <div *ngIf="selectedMessages.length===0"
+                    style="position: absolute;width: 100%;padding: 100px;height: 100%;text-align: center;
+                    display: flex;flex-direction: column;align-items: center;justify-content: center;">
+
+
+                <h4>Genius Chat</h4>
+                      Smart messaging app for real-time text, voice, and video conversations with friends. It offers personalized suggestions and seamless app integration to enhance your chats.
+
+
+                    </div>
+                    <div *ngIf="selectedMessages.length===0">
+                     <!-- Trigger the menu with a right-click on the container -->
+
+
+                      <!-- Custom Context Menu -->
+
+
+
+
+
+                    </div>
+                    <!-- List of messages -->
+                    <ul
+                      #conversationListContainer
+                      id="conversation"
+                      class="conversation-list py-0 simplebar-scrollable-y"
+                      data-simplebar="init"
+                      style="max-height: 485px; overflow-y: auto; padding: 15px"
+                    >
+                      <li
+                        *ngFor="let message of selectedMessages"
+                        class="clearfix"
+                        [ngClass]="{ odd: isCurrentUser(message.senderId) }"
+
+                      >
+                      <div class="message-p">
+                        <div class="chat-avatar"
+                        (contextmenu)="preventContextMenu($event)"
+                        >
+                          <img
+                            [src]="
+                              selectedUser?.id === message.receiverId
+                                ? 'assets/profile1.png'
+                                : message.imageUrl
+                            "
+                            class="rounded"
+                            alt="{{ message.name }}"
+                          />
+                          <i>{{ message.time | date : "shortTime" }}</i>
+                        </div>
+                        <div
+                          class="conversation-text"
+                        (contextmenu)="preventContextMenu($event)"
+
+                          [ngClass]="{ right: isCurrentUser(message.senderId) }"
+                        >
+                        <!-- React Menu Trigger -->
+                        <div class="react-menu" *ngIf="!isCurrentUser(message.senderId)" [matMenuTriggerFor]="beforeMenu">
+                          <i class="bi bi-chevron-down"></i>
+                          <i class="icon bi bi-emoji-smile"></i>
+                        </div>
+                        <div class="react-menu" *ngIf="isCurrentUser(message.senderId)" [matMenuTriggerFor]="afterMenu">
+                          <i class="bi bi-chevron-down"></i>
+                          <i class="icon bi bi-emoji-smile"></i>
+                        </div>
+
+                        <!-- Menu Trigger Buttons -->
+                        <mat-menu #beforeMenu="matMenu" xPosition="before">
+                          <button mat-menu-item>Item 1</button>
+                          <button mat-menu-item>Item 2</button>
+                        </mat-menu>
+
+                        <mat-menu #afterMenu="matMenu" xPosition="after">
+                          <button mat-menu-item>Item 1</button>
+                          <button mat-menu-item>Item 2</button>
+</mat-menu>
+
+
+
+
+                          <div class="ctext-wrap"
+                        (contextmenu)="preventContextMenu($event)"
+
+                        >
+                            <ng-container
+                        (contextmenu)="preventContextMenu($event)"
+
+                              *ngIf="isCurrentUser(message.senderId)"
+                            >
+                              <i>{{ message.name }}</i>
+                            </ng-container>
+                            <p>{{ message.content }}</p>
+                          </div>
+                        </div>
+
+
+
+
+                      </div>
+
+                        <div class="conversation-actions dropdown">
+                          <button
+                            class="btn btn-sm btn-link"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            <i class="uil uil-ellipsis-v"></i>
+                          </button>
+
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ul>
+      </div>
+      <!-- end card-body -->
+      <div class="card-body p-0">
+        <div class="row">
+          <div class="col">
+            <div class="send-bar mt-2 bg-light p-3">
+              <form
+                [formGroup]="messageForm"
+                class="needs-validation"
+                novalidate=""
+                name="chat-form"
+                id="chat-form"
+              >
+                <div class="row">
+                  <div class="col mb-2 mb-sm-0">
+                    <input
+                      *ngIf="!isRecording && !audioURL"
+                      type="text"
+                      class="form-control border-0"
+                      placeholder="Enter your text"
+                      required=""
+                      formControlName="content"
+                      style="font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif"
+
+                    />
+                    <div class="invalid-feedback">
+                      Please enter your messsage
+                    </div>
+                  </div>
+                  <div class="col-sm-auto">
+                    <div class="btn-group d-flex align-items-center" style="gap:15px;">
+
+                        <p-fileUpload
+                            mode="basic"
+                            chooseIcon="pi pi-paperclip"
+                            name="demo[]"
+                            url="https://www.primefaces.org/cdn/api/upload.php"
+                            accept="image/*"
+                            maxFileSize="1000000"
+                            *ngIf="!isRecording && !audioURL"
+                            i18n="@@chat.attachFile"
+                            styleClass=" ml-2"
+
+                             />
+
+
+                      <div class="recorder-container">
+                        <button
+                          *ngIf="!isRecording && !audioURL"
+                          (click)="startRecording()"
+                          [disabled]="isRecording"
+                          style="background: none; border: none;padding: 0;"
+                        >
+                          <i class="bi bi-mic"></i>
+                        </button>
+                        <button
+                          *ngIf="isRecording"
+                          (click)="stopRecording()"
+                          [disabled]="!isRecording"
+                        >
+                          Stop Recording
+                        </button>
+                        <span *ngIf="isRecording" class="timer">{{
+                          elapsedTime
+                        }}</span>
+
+                        <!-- Sample Indicator -->
+                        <div
+                          *ngIf="isRecording"
+                          class="sample-indicator-container"
+                        >
+                          <div class="sample-indicator">
+                            <div
+                              *ngFor="let sample of samples"
+                              class="sample-bar"
+                              [style.height]="sample.height"
+                            ></div>
+                          </div>
+
+                          <!-- Mirrored Sample Indicator -->
+                          <div class="sample-indicator mirrored">
+                            <div
+                              *ngFor="let sample of samples"
+                              class="sample-bar"
+                              [style.height]="sample.height"
+                            ></div>
+                          </div>
+                        </div>
+
+                        <div #audioContainer></div>
+                        <button
+                          *ngIf="isRecording || audioURL"
+                          (click)="removeRecording()"
+                          style="background: none; border: none"
+                        >
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
+
+
+
+                      <div class="emoji-picker-container">
+                        <!-- Emoji picker button -->
+                        <i (click)="toggleEmojiPicker()" class="icon bi bi-emoji-smile"></i>
+
+                        <!-- Emoji picker -->
+                        <div *ngIf="isEmojiPickerVisible" class="emoji-picker">
+                          <emoji-mart
+                            class="picker"
+                            color="var(--str-chat__primary-color)"
+                            title="Pick your emoji…"
+                            emoji="point_up"
+                            (emojiSelect)="onEmojiSelect($event)"
+                          ></emoji-mart>
+                        </div>
+                      </div>
+
+                      <div class="d-grid">
+                        <button
+                          (click)="sendMessage()"
+                          type="button"
+                          class="btn btn-success chat-send"
+                        >
+                          <i class="bi bi-send"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- end col -->
+                </div>
+                <!-- end row-->
+              </form>
+            </div>
+          </div>
+          <!-- end col-->
+        </div>
+        <!-- end row -->
+      </div>
+    </div>
+    <!-- end card -->
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- dialog -->
+<p-dialog [(visible)]="displayDialog" [modal]="true" [draggable]="false" [resizable]="false" header="Phone number" [contentStyle]="{'background-color': 'var(--main-bg)', 'color': '#ffffff'}">
+  <div class="phone-number-container">
+    <form [formGroup]="loadUserToChat" style="width:100%;">
+      <input class="searchForUser" 
+      type="text" 
+      pInputText 
+      placeholder="Phone" 
+      formControlName="phone"
+      (keypress)="validateNumberInput($event)" 
+      (input)="onInputChange($event)"
+      style="outline: none;border: 1px solid var(--main-color);padding: 5px;border-radius: 5px;width: 100%;" />
+    </form>
+    <div
+    *ngIf="userToCaht"
+    [ngStyle]="
+            userToCaht?.id === selectedUser?.id
+              ? { 'background-color': 'rgb(30 38 55)' }
+              : { 'background-color': 'var(--main-bg)' }
+          "
+          class="d-flex align-items-start mt-1 p-2 cursor-pointer"
+          (click)="selectUserToChat(userToCaht)"
+          >
+
+          <img
+            [src]="userToCaht.imageUrl ? userToCaht.imageUrl : 'assets/profile1.png'"
+            class="me-2 rounded-circle"
+            height="48"
+          />
+          <div class="w-100 overflow-hidden">
+            <div class="d-flex justify-content-between">
+              <h5 class="mt-0 mb-0 font-14">
+                {{ userToCaht.name }}
+              </h5>
+            </div>
+            <p class="mt-1 mb-0 text-muted font-14" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
+              <span class="w-75">{{ loadUserToChat.controls['phone'].value }}</span>
+              <span
+                class="w-25 float-end text-end"
+                *ngIf="countUnread(userToCaht) > 0"
+              >
+
+              </span>
+            </p>
+          </div>
+        </div>
+    <p *ngIf="!userToCaht&&!notFoundUser" class="instruction-text">Enter a phone number to start a chat.</p>
+    <p *ngIf="notFoundUser" class="instruction-text">User Not Found.</p>
+
+    <div class="dial-pad">
+      <div class="rowinputs" *ngFor="let row of dialPad">
+        <button *ngFor="let key of row" pButton type="button" label="{{key.label}}" (click)="appendNumber(key.label)" [style]="{'background-color': 'var(--main-bg)', 'color': '#ffffff'}" class="dial-pad-key"></button>
+      </div>
+      <div class="rowinputs">
+        <button pButton type="button" icon="pi pi-plus" (click)="appendNumber('+')" [style]="{'background-color': 'var(--main-bg)', 'color': '#ffffff'}" class="dial-pad-key"></button>
+        <button pButton type="button" label="0" (click)="appendNumber('0')" [style]="{'background-color': 'var(--main-bg)', 'color': '#ffffff'}" class="dial-pad-key"></button>
+        <button pButton type="button" icon="pi pi-arrow-left" (click)="removeLastDigit()" [style]="{'background-color': 'var(--main-bg)', 'color': '#ffffff'}" class="dial-pad-key"></button>
+      </div>
+    </div>
+  </div>
+</p-dialog>

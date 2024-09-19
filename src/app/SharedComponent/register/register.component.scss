@@ -1,0 +1,156 @@
+#register {
+  display: flex;
+  padding: 5% 0 0;
+  margin: auto;
+  background: black;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+}
+.register{
+  display: flex;
+  width:30%;
+  height: 100%;
+  flex-direction: column;
+}
+
+ .register-heading {
+  margin: 35px 0 10px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.register-heading h2 {
+  margin-left: auto;
+  font-size: 20px;
+  color: white;
+}
+.register-heading a {
+  text-decoration: none;
+  color: #999999;
+}
+.register-heading a:hover{
+  color:#1e73be;
+}
+form{
+  display: flex;
+  flex-direction: column;
+
+}
+
+.user-pass-wrap{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    align-items: center;
+}
+
+.policy{
+  display: flex !important;
+    justify-content: center;
+    margin-top: 30px;
+    color: white;
+    align-items: center;
+}
+.policy a{
+  font-weight: 500;
+  color:#999999;
+  padding: 0 5px;
+}
+::ng-deep .p-password{
+  width: 100%!important;
+}
+::ng-deep .p-inputtext{
+  padding: 0.5rem 0.75rem;
+  width: 100%;
+  font-family:  "Tajawal", sans-serif!important;
+
+}
+::ng-deep .p-password-input{
+  padding: 0.5rem 2rem!important;
+}
+::ng-deep .p-calendar,::ng-deep .p-dropdown{
+  width:100%;
+} 
+::ng-deep .p-calendar input{
+  padding: 0.5rem 2rem!important;
+} 
+
+::ng-deep .p-inputtext:enabled:focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: none!important;
+  border-color: #60a5fa;
+}
+// ::ng-deep input::placeholder{
+//   color:rgb(195, 196, 197)!important;
+// }
+
+// ::ng-deep .p-inputtext::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+//   color: blue!important; /* Change this to your desired color */
+//   opacity: 1; /* Firefox */
+// }
+
+// ::ng-deep .p-inputtext:-ms-input-placeholder { /* Internet Explorer 10-11 */
+//   color: blue!important; /* Change this to your desired color */
+// }
+
+// ::ng-deep .p-inputtext::-ms-input-placeholder { /* Microsoft Edge */
+//   color: blue!important; /* Change this to your desired color */
+// }
+::ng-deep .pi-key{
+  transform:rotate(45deg);
+}
+
+.p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover{
+  background-color: #1e73be;
+  border-color:#1e73be ;
+}
+p-inputnumber,::ng-deep .p-inputnumber{
+  width:100%;
+}
+
+
+button{
+  background: #4a88bf;
+    color: white;
+    font-weight: 500;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* For Chrome and Safari */
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+
+
+button:hover{
+  background-color: #1e73be;
+  color:white;
+}
+@media (min-width:800px){
+  .register{
+    width:30%;
+  }
+}
+@media (max-width:768px){
+  .register{
+    width:60%;
+  }
+}
+@media (max-width:425px){
+  .register{
+    width:90%;
+  }
+}
+li{
+  font-family:  "Tajawal", sans-serif!important;
+}

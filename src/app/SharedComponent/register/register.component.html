@@ -1,0 +1,108 @@
+<div id="register">
+  <div class="register">
+    <h1>
+      <a href="https://geniusai-eg.com">
+        <img class="bs-cs-register-logo" src="https://geniusai-eg.com/storage/2023/09/Genius-Ai-white.png" alt="Genius AI Logo">
+      </a>
+    </h1>
+    <div class="register-heading">
+      <h2 i18n="@@register.heading">Sign Up</h2>
+      <span>
+        <a  routerLink="/login" i18n="@@register.login">Login</a>
+      </span>
+    </div>
+
+    <form [formGroup]="registerForm">
+      <p-iconField style="width: 100%;" iconPosition="left">
+        <p-inputIcon styleClass="pi pi-user"></p-inputIcon>
+
+        <input type="text" pInputText placeholder="Name" formControlName="name" i18n-placeholder="@@register.name"
+        [class]="{'ng-invalid': registerForm.get('name')?.invalid && registerForm.get('name')?.touched, 'ng-dirty': registerForm.get('name')?.errors?.['required']}"
+
+        />
+
+      </p-iconField>
+      <div style="min-height: 20px;">
+      <div style="height: 20px;display: flex;align-items: flex-start;"  class="validation-error">
+        <small class="ng-invalid ng-dirty" style="font-size: .80em;color:#fca5a5;" *ngIf="registerForm.controls['name'].value===''&& registerForm.controls['name'].touched" i18n="@@register.nameRequired">Name is required.</small>
+        <small class="ng-invalid ng-dirty" style="font-size: .80em;color:#fca5a5;" *ngIf="registerForm.controls['name'].invalid&&registerForm.controls['name'].value!==''&& registerForm.controls['name'].touched" i18n="@@register.nameRequired">Name must be more than 2 characters.</small>
+      </div>
+      </div>
+
+      <p-iconField style="width: 100%;" iconPosition="left">
+        <p-inputIcon styleClass="pi pi-envelope"></p-inputIcon>
+        <input type="email" pInputText placeholder="Email" formControlName="email" i18n-placeholder="@@register.email"
+        [class]="{'ng-invalid': registerForm.get('email')?.invalid && registerForm.get('email')?.touched, 'ng-dirty': registerForm.get('email')?.errors?.['required']}"
+
+        />
+      </p-iconField>
+      <div style="min-height: 20px;">
+        <div style="height: 20px;display: flex;align-items: flex-start;"  class="validation-error">
+          <small class="ng-invalid ng-dirty" style="font-size: .80em;color:#fca5a5;"  *ngIf="registerForm.controls['email'].value===''&& registerForm.controls['email'].touched" i18n="@@register.nameRequired">* Email is required.</small>
+          <small class="ng-invalid ng-dirty" style="font-size: .80em;color:#fca5a5;" *ngIf="registerForm.controls['email'].invalid&&registerForm.controls['email'].value!==''&& registerForm.controls['email'].touched" i18n="@@register.nameRequired"> * Must be a valid email.</small>
+        </div>
+        </div>
+
+
+
+
+
+      <p-iconField style="width: 100%;" iconPosition="left">
+        <p-password formControlName="password" [toggleMask]="true" placeholder="Password" i18n-placeholder="@@register.passwordPlaceholder"
+        [class]="{'ng-invalid': registerForm.get('password')?.invalid && registerForm.get('password')?.touched, 'ng-dirty': registerForm.get('password')?.errors?.['required']}"
+        >
+          <ng-template pTemplate="header">
+            <h6 i18n="@@register.pick">Pick a password</h6>
+          </ng-template>
+          <ng-template pTemplate="footer">
+            <p-divider></p-divider>
+            <p i18n="@@register.Suggestions" class="mt-2">Suggestions</p>
+            <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+              <li i18n="@@register.lowercase">At least one lowercase</li>
+              <li i18n="@@register.uppercase">At least one uppercase</li>
+              <li i18n="@@register.numeric">At least one numeric</li>
+              <li i18n="@@register.characters">Minimum 8 characters</li>
+            </ul>
+          </ng-template>
+        </p-password>
+        <p-inputIcon styleClass="pi pi-key" style="transform: rotate(45deg);"></p-inputIcon>
+      </p-iconField>
+      <div style="min-height: 20px;">
+        <div style="height: 20px;display: flex;align-items: flex-start;"  class="validation-error">
+          <small class="ng-invalid ng-dirty" style="font-size: .80em;color:#fca5a5;" *ngIf="registerForm.controls['password'].value===''&& registerForm.controls['password'].touched">
+        * Password is required.
+          </small>
+          <small class="ng-invalid ng-dirty" style="font-size: .80em;color:#fca5a5;" *ngIf="registerForm.controls['password'].invalid&&registerForm.controls['password'].value!==''&& registerForm.controls['password'].touched" class="mb-0">
+       * Must have characters and numbers, be at least 8 characters long, and include uppercase (A-Z), lowercase (a-z), numbers (0-9), and special characters.
+
+      </small>
+      </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+      <div>
+        <p *ngIf="Message!=''" class="mb-2 text-center" style="color: red;">
+          *{{Message}}
+        </p>
+
+      </div>
+      <button class="btn" (click)="onSubmit()" i18n="@@register.registerButton">Register</button>
+    </form>
+    <div class="policy">
+      <a href="" i18n="@@register.Terms">Terms and Conditions</a>
+      <small i18n="@@register.and">and</small>
+      <a href="" i18n="@@register.Privacy">Privacy Policy</a>
+    </div>
+  </div>
+</div>
+
