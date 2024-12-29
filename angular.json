@@ -21,7 +21,8 @@
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
-              "zone.js"
+              "zone.js",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
@@ -29,6 +30,19 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+
+              {
+                "glob": "**/*",
+                "input": "../8March/ProfileImages",
+                "output": "/ProfileImages/"
+
+              },
+              {
+                "glob": "**/*",
+                "input": "../8March/MessageFiles",
+                "output": "/MessageFiles/"
+
               },
               "src/assets"
             ],
@@ -39,7 +53,11 @@
               "node_modules/primeng/resources/primeng.css",
               "node_modules/primeicons/primeicons.css",
               "node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "node_modules/bootstrap-icons/font/bootstrap-icons.css"
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+              "node_modules/iconoir/css/iconoir.css",
+              "node_modules/cropperjs/dist/cropper.css"
+
+
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -96,7 +114,8 @@
           "options": {
             "polyfills": [
               "zone.js",
-              "zone.js/testing"
+              "zone.js/testing",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",

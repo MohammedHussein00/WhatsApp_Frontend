@@ -1,0 +1,26 @@
+# Angular
+node_modules/
+dist/
+.tmp/
+tmp/
+# Generated files
+package-lock.json
+yarn.lock
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+# Environment files
+src/environments/*.local.ts
+src/environments/*.dev.ts
+src/environments/*.staging.ts
+# IDE settings
+.idea/
+.vscode/
+*.swp
+*.swo
+# OS files
+.DS_Store
+Thumbs.db
+# Other
+coverage/

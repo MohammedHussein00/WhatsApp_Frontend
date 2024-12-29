@@ -1,0 +1,197 @@
+<div class="card" style="display: flex;flex-direction: row;align-items: flex-start;">
+<app-panel style="height: 100%;"></app-panel>
+  <div class="card-body p-0">
+    <!-- Tabs for different user categories -->
+
+    <p-avatar
+    icon="bi bi-chat-left-dots-fill"
+    styleClass="mr-2"
+    [style]="{ 'background-color': 'var(--main-primary)', color: 'white','position':'absolute','bottom':'30px','right':'20px','cursor':'pointer','z-index':'400'}"
+    severity="danger"
+    (click)="dialogShow()"
+     />
+
+    <ul
+      class="nav nav-tabs nav-bordered justify-content-between"
+      style="border-bottom: 2px solid"
+      role="tablist"
+    >
+      <li class="nav-item" role="presentation">
+        <a
+          (click)="switchTab('allUsers')"
+          [class.active]="selectedTab === 'allUsers'"
+          class="nav-link py-2"
+          role="tab"
+          style="
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        "
+        >
+          Chats
+        </a>
+      </li>
+      <li class="nav-item" role="presentation" style="align-items: center;display: flex;padding: 0 20px;gap: 25px;">
+        <i class="pi pi-pen-to-square"  (click)="usersGroups.toggleNewGroupMenu($event)"></i>
+        <i class="bi bi-filter" style="font-size: 21px;" (click)="usersGroups.togglesortMenu($event)"></i>
+      </li>
+
+      <!-- Add more tabs as needed -->
+    </ul>
+
+    <!-- Search box -->
+    <div class="app-search">
+      <form>
+        <div class="mb-2 w-100 position-relative">
+          <input
+            type="search"
+            class="form-control"
+            placeholder="People, groups &amp; messages..."
+            [(ngModel)]="searchKeyword" [ngModelOptions]="{standalone: true}"
+          />
+          <i
+            class="bi bi-search"
+            style="color: #8a96b6; position: absolute; left: 9px; top: 9px"
+          ></i>
+        </div>
+      </form>
+    </div>
+
+    <!-- List of users based on selected tab -->
+    <div
+      class="tab-content"
+      style="overflow: hidden; overflow-y: scroll; height: 88vh;position:relative;"
+    >
+    <div *ngIf="users.length===0" style="display: flex;margin: auto;position: absolute;height: 100%;text-align: center;width: 100%;justify-content: center;flex-direction: column;">
+      <i class="bi bi-info-circle"></i>
+      there is no chats
+    </div>
+    <div
+    *ngIf="selectedTab === 'allUsers'"
+    class="tab-pane show active card-body pb-0"
+    id="allUsers"
+    >
+
+    <div (contextmenu)="ReactWithThisUser($event)"
+    *ngFor="let user of users"
+    [ngStyle]="
+            user?.id === selectedUser?.id
+              ? { 'background-color': 'rgb(30 38 55)' }
+              : { 'background-color': 'var(--main-bg)' }
+          "
+          class="user-card d-flex align-items-start mt-1 p-2 cursor-pointer"
+          (click)="selectUser(user)"
+          >
+
+          <img
+            [src]="user.imageUrl ? user.imageUrl : 'assets/profile1.png'"
+            class="me-2 rounded-circle"
+            height="48"
+          />
+          <div class="w-100 overflow-hidden">
+            <div class="d-flex justify-content-between">
+              <h5 class="mt-0 mb-0 font-14">
+                {{ user.name }}
+              </h5>
+              <span
+              class="float-end  font-12"
+              style="--bs-text-opacity: 1;font-size:smaller"
+              [ngStyle]="{
+                color: usersGroups.countUnread(user, messages, selectedUser) > 0
+                  ? 'var(--main-primary)'
+                  : 'var(--main-color)'
+              }"
+            >
+              {{
+                global.getLastMessageTime(user, messages)
+              }}
+            </span>
+
+            </div>
+            <p class="mt-1 mb-0 text-muted font-14" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;"
+
+            >
+              <span class="w-75"
+
+              >{{ global.getLastMessage(user,messages) }}</span>
+              <span
+                class="w-25 float-end text-end"
+                *ngIf="usersGroups.countUnread(user,messages,selectedUser) > 0"
+              >
+                <span class="badge badge-danger-lighten" style="color: var(--main-active);background: var(--main-primary);">{{
+                  usersGroups.countUnread(user,messages,selectedUser)
+                }}</span>
+
+              </span>
+              <span *ngIf="global.isCurrentUserSendLastMessage(user,messages).isLastMessageFromCurrentUser" style="display: flex; gap: 5px;justify-content: flex-end;align-items: center;" class="w-25 float-end text-end">
+                <i style="font-size:14px"
+
+                  class="bi"
+                  [ngStyle]="{'color': global.isCurrentUserSendLastMessage(user,messages).statusType === 2 ? '#1f1fbc' : 'initial'}"
+                  [ngClass]="{
+                    'bi-check': global.isCurrentUserSendLastMessage(user,messages).statusType === 0,
+                    'bi-check-all': global.isCurrentUserSendLastMessage(user,messages).statusType === 1||global.isCurrentUserSendLastMessage(user,messages).statusType === 2,
+                    'bi-clock': global.isCurrentUserSendLastMessage(user,messages).statusType === 3
+
+                  }"
+                ></i>
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- Add similar structures for other tab contents -->
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<!-- dialog -->
+<p-dialog [(visible)]="displayDialog" [modal]="true" [draggable]="false" [resizable]="false" header="Email" [contentStyle]="{'background-color': 'var(--main-bg)', 'color': '#ffffff'}">
+  <div class="email-container">
+    <form [formGroup]="loadUserToChat" style="width:100%;">
+      <input class="searchForUser"
+        type="email"
+        pInputText
+        placeholder="Email"
+        formControlName="email"
+        (input)="loadUsers()"
+        style="outline: none;border: 1px solid var(--main-color);padding: 5px;border-radius: 5px;width: 100%;" />
+    </form>
+
+    <div *ngIf="userToCaht" [ngStyle]="userToCaht?.id === selectedUser?.id ? { 'background-color': 'rgb(30 38 55)' } : { 'background-color': 'var(--main-bg)' }"
+      class="d-flex align-items-start mt-1 p-2 cursor-pointer" (click)="selectUserToChat(userToCaht);global.setuserToChat(userToCaht)">
+      <img [src]="userToCaht.imageUrl ? userToCaht.imageUrl : 'assets/profile1.png'"
+        class="me-2 rounded-circle" height="48" />
+      <div class="w-100 overflow-hidden">
+        <div class="d-flex justify-content-between">
+          <h5 class="mt-0 mb-0 font-14">{{ userToCaht.name }}</h5>
+        </div>
+        <p class="mt-1 mb-0 text-muted font-14" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
+          <span class="w-75">{{ loadUserToChat.controls['email'].value }}</span>
+        </p>
+      </div>
+    </div>
+
+    <p *ngIf="!userToCaht && !notFoundUser" class="instruction-text">Enter an email to start a chat.</p>
+    <p *ngIf="notFoundUser" class="instruction-text">User Not Found.</p>
+  </div>
+</p-dialog>
+
+
+
+
+
+
+
+
+
+<app-filter-new-chat-panel></app-filter-new-chat-panel>
+
+
+

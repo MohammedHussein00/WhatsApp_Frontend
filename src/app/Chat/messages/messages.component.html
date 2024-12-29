@@ -1,0 +1,435 @@
+<div class="card-body px-0 pb-0 p-0 menu-container" (contextmenu)="showContextMenu($event)">
+  <div class="context-menu" [ngClass]="{ visible: displayMenu }"
+    [ngStyle]="{ 'left.px': menuPosition.x, 'top.px': menuPosition.y }">
+    <p-card [style]="{ display: 'flex' }">
+      <div class="popup-header" style="display: flex; gap: 10px" (click)="closeChat();hideContextMenu();">
+        <i class="pi pi-times" style="font-size: 13px"></i>
+        <p>Close Chat</p>
+      </div>
+      <div class="popup-header" style="display: flex; gap: 10px">
+        <i style="font-size: 13px" class="pi pi-check-square"></i>
+        <p>Select message</p>
+      </div>
+      <div class="popup-header" style="display: flex; gap: 10px">
+        <i class="pi pi-times" style="font-size: 13px"></i>
+        <p>Close Chat</p>
+      </div>
+    </p-card>
+  </div>
+
+  <ul class="conversation-list py-0 simplebar-scrollable-y" data-simplebar="init" style="
+      height: 90.6vh;
+      overflow: hidden;
+      overflow-y: auto;
+      padding: 0;
+      margin: 0;
+    " (scroll)="onScroll($event)">
+    <div class="simplebar-wrapper">
+      <div class="simplebar-height-auto-observer-wrapper">
+        <div class="simplebar-height-auto-observer"></div>
+      </div>
+      <div class="simplebar-mask">
+        <div class="simplebar-offset" style="right: 0px; bottom: 0px">
+          <div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content">
+            <div class="simplebar-content">
+              <div *ngIf="!selectedUser" style="
+                  position: absolute;
+                  width: 100%;
+                  padding: 100px;
+                  height: 100%;
+                  text-align: center;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  justify-content: center;
+                ">
+                <h4>Genius Chat</h4>
+                Smart messaging app for real-time text, voice, and video
+                conversations with friends. It offers personalized suggestions
+                and seamless app integration to enhance your chats.
+              </div>
+              <div *ngIf="selectedMessages.length === 0">
+                <!-- Trigger the menu with a right-click on the container -->
+
+                <!-- Custom Context Menu -->
+              </div>
+              <!-- List of messages -->
+              <app-selected-chated-user *ngIf="selectedUser"></app-selected-chated-user>
+              <ul #conversationListContainer id="conversation"
+                class="conversation-list py-0 simplebar-scrollable-y tab-content" data-simplebar="init" style="
+                  max-height: 622px;
+                  overflow-y: auto;
+                  padding: 15px 7px !important;
+                " (scroll)="onScroll($event)">
+                <div *ngFor="let group of groupedMessages"
+                  style="position: relative;display: flex;width: 100%;gap: 10px;flex-direction: column;">
+                  <i class="date-header" [ngStyle]="{position: isScrolling? 'sticky' : 'static'}"
+                    style="text-align: center;position: sticky;top: 0;width: fit-content;margin: auto; z-index: 7; ">{{
+                    messagesService.getLastMessageTime(group[0].time) }}</i>
+
+                  <li *ngFor="let message of group;let i=index;let l=last" #messageElement
+                    [ngStyle]="{'margin-bottom': message.reacts ? '10px' : '5px'}">
+                    <div class="clearfix" [ngClass]="{ odd: !isCurrentUser(message.senderId) }" (dblclick)="
+                  messagesService.toggleReplayMenu($event);
+                  reactMessageMenu1.hide();
+                  reactMessageMenu.hide();
+                  addMessageEffectOnDBClick($event);
+                  setReplayedMessage(message.id)
+                ">
+                      <div class="message-p" (dblclick)="$event.stopPropagation()">
+                        <div class="conversation-text" (contextmenu)="preventContextMenu($event)"
+                          [ngClass]="{ right: !isCurrentUser(message.senderId) }">
+                          <!-- React Menu Trigger -->
+                          <div class="react-menu" *ngIf="isCurrentUser(message.senderId)" (click)="
+                            reactMessageMenu1.toggle($event);
+                            reactMessageId = message.id;
+                            reactMessageMenu.hide()
+                          ">
+                            <i class="bi bi-chevron-down"></i>
+                            <i class="icon bi bi-emoji-smile"></i>
+                          </div>
+                          <div class="react-menu" *ngIf="!isCurrentUser(message.senderId)" (click)="
+                            reactMessageMenu1.toggle($event);
+                            reactMessageId = message.id;
+                            reactMessageMenu.hide()
+                          " style="flex-direction: row-reverse;right:110%;left:inherit;">
+                            <i class="bi bi-chevron-down"></i>
+                            <i class="icon bi bi-emoji-smile"></i>
+                          </div>
+
+                          <!-- Menu Trigger Buttons -->
+
+                          <div class="ctext-wrap" [ngClass]="{
+                            'remove-after': (i > 0 &&
+                              !l &&
+                              compareMessageDates(message.time, group[i - 1].time) &&
+                              message.senderId === group[i - 1].senderId) ||
+                              (l &&
+                                i !== 0 &&
+                                compareMessageDates(group[i - 1].time, message.time) &&
+                                message.senderId === group[i - 1].senderId)
+                          }" (contextmenu)="
+                            preventContextMenu($event);
+                            reactMessageMenu.toggle($event);
+                            set_left_top_to_menu($event);
+                            reactMessageId = message.id;
+                            reactMessageMenu1.hide()
+                          ">
+                            <div style="display: flex;width: 100%;">
+                              <!-- <<<<<<<<<<<<<<<<<<<<<<react>>>>>>>>>>>>>>>>>>>>>>> -->
+                              <div style="display: flex;flex-direction: column;" [ngStyle]="{ 'justify-content': isCurrentUser(message.senderId) ? 'flex-start' : 'flex-end' ,
+                              'width': message.contentType === 0 ? '100%' : 'auto'}">
+                                <span *ngIf="message.reacts?.length>0" [ngStyle]="{
+                            position: 'absolute',
+                            bottom: '-20px',
+                            right: !isCurrentUser(message.senderId) ? '10px' : 'unset',
+                            left: isCurrentUser(message.senderId) ? '10px' : 'unset',
+                            background: '#1e2637',
+                            border: '1px solid #8c9095',
+                            'border-radius': '7px',
+                            padding: '0 4px'
+                          }" (click)="
+                          reactemoji.toggle($event);
+                          reactMessageId = message.id;
+                          reactMessageMenu.hide();
+                          reactMessageMenu1.hide()
+                        "
+                        style="display: flex;"
+                        >
+                        <p
+                        style="margin: 0;"
+                        *ngFor="let groupedReact of getGroupedReactions(message); let last = last"
+                        [ngStyle]="{ 'margin-right': last ? '0' : '2px' }"
+                      >
+                        {{ groupedReact }}{{ last && message.reacts.length > 1 ?' '+ message.reacts.length : '' }}
+                      </p>
+
+                        </span>
+
+                                <ng-container (contextmenu)="preventContextMenu($event)"
+                                  *ngIf="!isCurrentUser(message.senderId)">
+                                </ng-container>
+
+
+
+                                <div class="replayMessage-content" *ngIf="message.replayMessageId!==0"
+                                  style="    flex-direction: column;align-items: flex-start;display: flex;"
+                                  [ngStyle]="{ 'background': isCurrentUser(message.senderId) ? '#2b3748' : '#3a89ff'}"
+                                  (click)="scrollToMessage(message.replayMessageId)">
+                                  <div style="font-size: 12px;"
+                                    [ngStyle]="{ 'color': isCurrentUser(message.senderId) ? 'var(--main-primary)' : '#0044a8'}">
+                                    {{messagesService.getReplayMessageSenerName(message.replayMessageId,selectedMessages)
+                                    }}
+                                  </div>
+                                  <div style="font-size: 12px;"
+                                    [ngStyle]="{ 'color': isCurrentUser(message.senderId) ? 'var(--main-color)' : '#d2d2d2'}">
+                                    {{messagesService.getReplayMessageContent(message.replayMessageId,selectedMessages)}}
+                                  </div>
+                                </div>
+
+
+
+
+                                <p *ngIf="message.contentType===0" style="text-align: start">{{ message.content }}</p>
+                                <div *ngIf="message.contentType===1" style="padding: 5px; color: white">
+                                  <!-- <img src="{{message.content}}" alt=""> -->
+                                  <p-image src="{{message.content}}" alt="Image" [preview]="true" />
+                                </div>
+                                <div *ngIf="message.contentType===2"
+                                  style="text-align: start;display: flex;align-items: center;gap: 15px;">
+                                  <i class="bi bi-play" (click)="playAudio(message.id)" style="font-size: 18px;"></i>
+
+                                  <div style="width:200px" [id]="'message-' + message.id">
+                                  </div>
+                                  <!-- Add audio controls or display here -->
+                                </div>
+                                <div style="display: flex; align-items: center;" [ngStyle]="{
+                                  'width': message.contentType === 0 ? '100%' : 'auto',
+                                  'justify-content': message.contentType === 2 ? 'space-between' : 'flex-end'
+                                }">
+
+                                  <div *ngIf="message.contentType===2" style="padding: 5px; color: white">
+                                    <small>{{ messagesService.getAudioMessageCurrentPlayTimeString(hours,message) }}</small>: <small>{{ messagesService.getAudioMessageCurrentPlayTimeString(minutes,message) }}</small>
+                                    :
+                                    <small style="width: 41px; padding: 0">{{
+                                      messagesService.getAudioMessageCurrentPlayTime(currentTimeInSeconds,message)
+
+                                      }}</small>
+                                  </div>
+
+                                  <span style="display: flex; gap: 5px;justify-content: flex-end;align-items: center;">
+                                    <i>{{ message.time | date : "shortTime" }}</i>
+                                    <i style="font-size:14px" *ngIf="!isCurrentUser(message.senderId)" class="bi"
+                                      [ngStyle]="{'color': message.status === 2 ? '#1f1fbc' : 'initial'}" [ngClass]="{
+                                'bi-check': message.status === 0,
+                                'bi-check-all': message.status === 1||message.status === 2,
+                                'bi-clock': message.status === 3
+
+                              }"></i>
+                                  </span>
+
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="conversation-actions dropdown">
+                        <button class="btn btn-sm btn-link" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="uil uil-ellipsis-v"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </li>
+                </div>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ul>
+</div>
+<!-- end card-body -->
+
+<p-overlayPanel #reactMessageMenu styleClass="reactMessageMenu">
+  <div class="p-1">
+    <div class="menu-item" (click)="
+        messagesService.toggleReplayMenu($event); reactMessageMenu.hide()
+      ">
+      <i class="bi bi-arrow-90deg-right" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Reply</div>
+    </div>
+
+    <div class="menu-item" (click)="
+        copyMessage(reactMessageId);
+        reactMessageMenu.hide();
+        setReplayedMessage(reactMessageId)
+      ">
+      <i class="pi pi-copy" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Copy</div>
+    </div>
+    <hr style="width: 100%; margin: 0" />
+
+    <div class="menu-item">
+      <i class="bi bi-arrow-90deg-left" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Forward</div>
+    </div>
+    <div class="menu-item">
+      <i class="pi pi-star" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Star</div>
+    </div>
+
+    <div class="menu-item">
+      <i class="bi bi-pin-angle" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Pin</div>
+    </div>
+    <div class="menu-item">
+      <i class="pi pi-trash" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Delete</div>
+    </div>
+    <hr style="width: 100%; margin: 0" />
+    <div class="menu-item">
+      <i class="pi pi-check-square" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Select</div>
+    </div>
+    <div class="menu-item">
+      <i class="pi pi-share-alt" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Share</div>
+    </div>
+
+    <div class="d-flex" style="gap: 10px">
+      <p (click)="addReact(reactMessageId, '👍'); reactMessageMenu.hide()"
+        style="font-size: 25px; user-select: none; cursor: pointer;">👍</p>
+      <p (click)="addReact(reactMessageId, '❤️'); reactMessageMenu.hide()"
+        style="font-size: 25px; user-select: none; cursor: pointer;">❤️</p>
+      <p (click)="addReact(reactMessageId, '😂'); reactMessageMenu.hide()"
+        style="font-size: 25px; user-select: none; cursor: pointer;">😂</p>
+      <p (click)="addReact(reactMessageId, '😮'); reactMessageMenu.hide()"
+        style="font-size: 25px; user-select: none; cursor: pointer;">😮</p>
+      <p (click)="addReact(reactMessageId, '😭'); reactMessageMenu.hide()"
+        style="font-size: 25px; user-select: none; cursor: pointer;">😭</p>
+      <p (click)="addReact(reactMessageId, '🙏'); reactMessageMenu.hide()"
+        style="font-size: 25px; user-select: none; cursor: pointer;">🙏</p>
+
+      <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" />
+      <i class="pi pi-plus" style="padding: 5px; border: 1px solid; border-radius: 50%"></i>
+    </div>
+  </div>
+</p-overlayPanel>
+<p-overlayPanel #reactMessageMenu1>
+  <div class="p-1">
+    <div class="menu-item" (click)="
+        messagesService.toggleReplayMenu($event);
+        reactMessageMenu1.hide();
+        setReplayedMessage(reactMessageId)
+      ">
+      <i class="bi bi-arrow-90deg-right" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Reply</div>
+    </div>
+
+    <div class="menu-item" (click)="copyMessage(reactMessageId); reactMessageMenu1.hide()">
+      <i class="pi pi-copy" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Copy</div>
+    </div>
+    <hr style="width: 100%; margin: 0" />
+
+    <div class="menu-item">
+      <i class="bi bi-arrow-90deg-left" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Forward</div>
+    </div>
+    <div class="menu-item">
+      <i class="pi pi-star" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Star</div>
+    </div>
+
+    <div class="menu-item">
+      <i class="bi bi-pin-angle" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Pin</div>
+    </div>
+    <div class="menu-item">
+      <i class="pi pi-trash" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Delete</div>
+    </div>
+    <hr style="width: 100%; margin: 0" />
+    <div class="menu-item">
+      <i class="pi pi-check-square" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Select</div>
+    </div>
+    <div class="menu-item">
+      <i class="pi pi-share-alt" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Share</div>
+    </div>
+
+    <div class="d-flex" style="gap: 10px">
+      <p (click)="addReact(reactMessageId, '👍');reactMessageMenu1.hide()"
+        style="font-size: 25px; user-select: none; cursor: pointer;">👍</p>
+      <p (click)="addReact(reactMessageId, '❤️');reactMessageMenu1.hide()"
+        style="font-size: 25px; user-select: none; cursor: pointer;">❤️</p>
+      <p (click)="addReact(reactMessageId, '😂');reactMessageMenu1.hide()"
+        style="font-size: 25px; user-select: none; cursor: pointer;">😂</p>
+      <p (click)="addReact(reactMessageId, '😮');reactMessageMenu1.hide()"
+        style="font-size: 25px; user-select: none; cursor: pointer;">😮</p>
+      <p (click)="addReact(reactMessageId, '😭');reactMessageMenu1.hide()"
+        style="font-size: 25px; user-select: none; cursor: pointer;">😭</p>
+      <p (click)="addReact(reactMessageId, '🙏');reactMessageMenu1.hide()"
+        style="font-size: 25px; user-select: none; cursor: pointer;">🙏</p>
+      <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" />
+      <i class="pi pi-plus" style="padding: 5px; border: 1px solid; border-radius: 50%"></i>
+    </div>
+  </div>
+</p-overlayPanel>
+
+
+
+
+
+
+
+<!-- react icon popup -->
+<p-overlayPanel #reactemoji>
+  <div class="p-1">
+    <div class="menu-item" (click)="
+        messagesService.toggleReplayMenu($event); reactMessageMenu.hide()
+      ">
+      <i class="bi bi-arrow-90deg-right" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Reply</div>
+    </div>
+
+    <div class="menu-item" (click)="
+        copyMessage(reactMessageId);
+        reactMessageMenu.hide();
+        setReplayedMessage(reactMessageId)
+      ">
+      <i class="pi pi-copy" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Copy</div>
+    </div>
+    <hr style="width: 100%; margin: 0" />
+
+    <div class="menu-item">
+      <i class="bi bi-arrow-90deg-left" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Forward</div>
+    </div>
+    <div class="menu-item">
+      <i class="pi pi-star" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Star</div>
+    </div>
+
+    <div class="menu-item">
+      <i class="bi bi-pin-angle" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Pin</div>
+    </div>
+    <div class="menu-item">
+      <i class="pi pi-trash" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Delete</div>
+    </div>
+    <hr style="width: 100%; margin: 0" />
+    <div class="menu-item">
+      <i class="pi pi-check-square" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Select</div>
+    </div>
+    <div class="menu-item">
+      <i class="pi pi-share-alt" style="font-size: 1rem; margin-right: 10px"></i>
+      <div>Share</div>
+    </div>
+
+    <div class="d-flex" style="gap: 10px">
+      <p (click)="addReact(reactMessageId, '👍'); reactemoji.hide()"
+        style="font-size: 25px; user-select: none; cursor: pointer;">👍</p>
+      <p (click)="addReact(reactMessageId, '❤️'); reactemoji.hide()"
+        style="font-size: 25px; user-select: none; cursor: pointer;">❤️</p>
+      <p (click)="addReact(reactMessageId, '😂'); reactemoji.hide()"
+        style="font-size: 25px; user-select: none; cursor: pointer;">😂</p>
+      <p (click)="addReact(reactMessageId, '😮'); reactemoji.hide()"
+        style="font-size: 25px; user-select: none; cursor: pointer;">😮</p>
+      <p (click)="addReact(reactMessageId, '😭'); reactemoji.hide()"
+        style="font-size: 25px; user-select: none; cursor: pointer;">😭</p>
+      <p (click)="addReact(reactMessageId, '🙏'); reactemoji.hide()"
+        style="font-size: 25px; user-select: none; cursor: pointer;">🙏</p>
+
+      <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" />
+      <i class="pi pi-plus" style="padding: 5px; border: 1px solid; border-radius: 50%"></i>
+    </div>
+  </div>
+</p-overlayPanel>

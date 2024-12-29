@@ -1,18 +1,11 @@
 import { Routes } from '@angular/router';
-import { LayoutHomeComponent } from './SharedComponent/layout-home/layout-home.component';
-import { HomeComponent } from './SharedComponent/home/home.component';
-import { LoginComponent } from './SharedComponent/login/login.component';
-import { PrivateChatComponent } from './SharedComponent/private-chat/private-chat.component';
-import { RegisterComponent } from './SharedComponent/register/register.component';
+import { LoginComponent } from './login/login.component';
+import { ChatLayoutComponent } from './Chat/chat-layout/chat-layout.component';
 
 export const routes: Routes = [
-  {path:'',redirectTo:'/Home',pathMatch:'full'},
-  {path:'',component:LayoutHomeComponent,children:[
-    {path:'Home',component:HomeComponent}
-  ]
-},
+  {path:'',redirectTo:'/login',pathMatch:'full'},
+
 {path:'login',component:LoginComponent},
-{path:'sign-up',component:RegisterComponent},
-{path:'chat',component:PrivateChatComponent}
+{path:'chat',component:ChatLayoutComponent}
 
 ];

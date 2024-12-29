@@ -1,0 +1,450 @@
+.nav-tabs.nav-bordered {
+  border-bottom: 2px solid var(--ct-border-color);
+}
+.app-search form .form-control {
+  border: none;
+  height: calc(1.5em + 0.9rem + calc(var(--ct-border-width) * 2));
+  padding-left: 40px;
+  padding-right: 20px;
+  background-color: var(--ct-light);
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.nav-tabs.nav-bordered li a.active {
+  border-bottom: 2px solid var(--ct-primary);
+}
+.nav-tabs.nav-bordered li a {
+  border: 0;
+  padding: 0.625rem 1.25rem;
+}
+.font-14 {
+  font-size: 14px!important;
+}
+.font-12 {
+  font-size: 12px!important;
+}
+.text-muted {
+  opacity: 1;
+  color: #8a969c!important;
+}
+.badge {
+  vertical-align: middle;
+}
+.badge-danger-lighten {
+  color:#fa5c7c;
+  background-color: #ffeff2;
+}
+.input-group>:not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+  margin-left: calc(var(--ct-border-width) * -1);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.conversation-list .message-p .chat-avatar img {
+  border-radius: 100%;
+  width: 100%;
+}
+.rounded {
+  border-radius: 0.25rem!important;
+}
+.conversation-list .message-p .chat-avatar i {
+  font-size: 12px;
+  font-style: normal;
+}
+.conversation-list .message-p .ctext-wrap {
+  background: var(--main-bg-lighter);
+  border-radius: 3px;
+  display: inline-block;
+  padding: 5px 10px;
+  min-width: 100px;
+  color:white;
+  position: relative;
+}
+.conversation-list .message-p .ctext-wrap i {
+  display: block;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  width: max-content;
+  position: relative;
+  color:#bbc1c9;
+}
+.conversation-list .message-p .ctext-wrap p {
+  padding-top: 3px;
+  color: white;
+}
+.conversation-list .message-p .chat-avatar {
+  float: left;
+  text-align: center;
+  width: 52px;
+}
+.conversation-list .message-p .ctext-wrap:after {
+  left: -11px;
+  top: 0;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-top-color: var(--main-bg-lighter);
+  border-width: 6px;
+  margin-right: -1px;
+  border-right-color: var(--main-bg-lighter);
+}
+.conversation-list .message-p .conversation-text {
+  float: left;
+  position: relative;
+  font-size: 13px;
+  margin-left: 12px;
+  width: fit-content;
+}
+
+.conversation-list li .clearfix{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.conversation-list .odd{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  flex-direction: row-reverse;
+}
+.conversation-list  .message-p{
+  display: flex;
+  display: flex;
+  justify-content: flex-start;
+  width: fit-content;
+}
+.conversation-list .odd .message-p{
+  display: flex;
+  justify-content: flex-end;
+  width: fit-content;
+  flex-direction: row-reverse;
+}
+.conversation-list .odd .message-p .chat-avatar {
+  float: right!important;
+}
+.conversation-list .odd .message-p .conversation-text {
+  float: right!important;
+  margin-right: 12px;
+  text-align: right;
+  position: relative;
+}
+.conversation-list .odd .message-p .ctext-wrap {
+  background-color: var(--main-primary);
+  color: var(--main-color);
+}
+.conversation-list .ctext-wrap p {
+  margin: 0;
+  padding-top: 3px;
+  margin-right: 50px;
+}
+.conversation-list .odd .ctext-wrap:after {
+  border-color: transparent;
+  border-left-color: var(--main-primary);
+  border-top-color: var(--main-primary);
+  right: -10px;
+  left: auto;
+}
+.clearfix::after{
+  display: none;
+}
+.conversation-list li {
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.form-control:focus {
+  color: var(--ct-body-color);
+  background-color: var(--ct-input-bg);
+  border-color: var(--ct-border-color);
+  outline: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.bi-send::before {
+  transform: rotate(45deg);
+}
+.date-header{
+  margin: 8px 0;
+  padding: 5px;
+  border-radius: 3px;
+  background-color: #1e2637;
+  color: white;
+  font-size: 12px;
+}
+.ctext-wrap.remove-after::after {
+  content: none!important; /* This will remove the pseudo-element */
+}
+.card{
+color: var(--main-color);
+background-color: var(--main-bg);
+width: 100%;
+margin: auto;
+height: 100%;
+border-radius: 0!important;
+}
+.send-bar{
+background-color: var(--main-bg-lighter)!important;
+
+}
+input{
+background-color: var(--main-bg);
+color:var(--main-color);
+}
+input:focus{
+background-color: var(--main-bg)!important;
+}
+input[type="search"]:focus,input[type="search"]{
+background-color: var(--main-bg-lighter)!important;
+}
+input::placeholder{
+color:var(--main-color);
+}
+button{
+background-color: var(--main-primary);
+}
+button:hover{
+background-color: var(--main-primary-hover);
+}
+
+::ng-deep .pi-paperclip{
+padding: 0 5px;
+cursor: pointer;
+}
+
+
+
+.menu-container {
+position: relative;
+}
+
+.context-menu {
+position: fixed;
+background: white;
+border: 1px solid #ccc;
+border-radius: 4px;
+box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+z-index: 1050;
+opacity: 0;
+transform: scale(0.9);
+transition: opacity 0.3s ease, transform 0.3s ease;
+visibility: hidden;
+}
+
+.context-menu.visible {
+opacity: 1;
+transform: scale(1);
+visibility: visible;
+}
+
+.context-menu ul {
+list-style: none;
+padding: 0;
+margin: 0;
+}
+
+.context-menu li {
+padding: 8px 12px;
+cursor: pointer;
+}
+
+.context-menu li:hover {
+background-color: #f0f0f0;
+}
+
+
+::ng-deep .p-card{
+flex-direction: column;
+align-items: center;
+}
+::ng-deep .p-card-content{
+padding: 0;
+}
+.popup-header{
+display: flex;
+gap: 12px;
+font-size: 13px;
+cursor:pointer;
+padding: 4px 0;
+}
+
+
+::ng-deep .p-card .p-card-body {
+padding: 1rem;
+}
+::ng-deep .p-card .p-card-title{
+font-size: 14px;
+text-align: center;
+}
+::ng-deep .p-card .p-card-subtitle {
+font-size: 12px;
+text-align: center;
+font-weight: 400;
+color: rgba(255, 255, 255, 0.6);
+}
+
+
+
+// react icons
+/* Keyframe animations */
+/* Base styles for react-menu */
+.react-menu {
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+width: 20px;
+background: #1e2637;
+border: 1px solid #ccc;
+border-radius: 24px;
+box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+padding: 5px 7px;
+display: flex;
+opacity: 0;
+cursor: pointer;
+overflow: hidden;
+gap: 7px;
+animation: hideMenu 0.3s ease forwards;
+align-items: center;
+}
+
+/* Default position (for normal li) */
+.conversation-list li:not(.odd) .conversation-text .react-menu {
+left: calc(100% + 10px);
+top:calc(50% - 0px);
+flex-direction: row-reverse;
+}
+
+/* Position for odd items */
+.conversation-list .odd .conversation-text .react-menu {
+right: 100%;
+}
+
+/* Show menu on hover */
+.conversation-text:hover .react-menu {
+animation: showMenu 0.3s ease forwards;
+animation-delay: 0.2s;
+}
+
+/* Keyframe animations */
+@keyframes showMenu {
+0% {
+  opacity: 0;
+  width: 20px;
+  overflow: hidden;
+}
+100% {
+  opacity: 1;
+  width: auto;
+  overflow: visible;
+}
+}
+
+@keyframes hideMenu {
+0% {
+  opacity: 1;
+  width: auto;
+  overflow: visible;
+}
+100% {
+  opacity: 0;
+  width: 20px;
+  overflow: hidden;
+}
+}
+
+/* Initial state for icons */
+.react-menu .icon {
+opacity: 0;
+transition: opacity .3s ease;
+}
+
+/* Transition for icons after menu becomes visible */
+.conversation-text:hover .react-menu .icon {
+opacity: 1;
+transition: opacity .3s ease 0.3s;
+}
+
+
+
+//^ overlaypanel react message
+.custom-overlay {
+  background-color: #2b3748;
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  flex-wrap: wrap;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background-color: #2b3748;
+  border-radius: 4px;
+}
+
+.pi {
+  color: white;
+}
+::ng-deep .reactMessageMenu{
+  left: var(--custom-left)!important;
+  top: var(--custom-top)!important;
+}
+::ng-deep .reactEmoji{
+  left: var(--custom-left)!important;
+  top: var(--custom-top)!important;
+}
+
+.darken-effect {
+  filter: brightness(0.6);
+  transition: filter 0.5s ease;
+}
+
+
+
+.tab-content::-webkit-scrollbar {
+  width: 8px; /* Default scrollbar width */
+ transition: width 0.3s ease;
+ background-color: #55555500;
+}
+
+.tab-content::-webkit-scrollbar-track {
+  background: #2b3748;
+}
+
+.tab-content::-webkit-scrollbar-thumb {
+  background: #8c908f;
+  border-radius: 4px;
+  border: 2px solid #2b3748;
+}
+.tab-content:hover {
+  -webkit-mask-position: left top;
+}
+.tab-content {
+  overflow-y: scroll;
+  mask-image: linear-gradient(to top, transparent, black),
+    linear-gradient(to left, transparent 17px, black 17px);
+  mask-size: 100% 20000px;
+  mask-position: left bottom;
+  -webkit-mask-image: linear-gradient(to top, transparent, black), linear-gradient(to left, transparent 8px, black 4px);
+  -webkit-mask-size: 100% 19397px;
+  -webkit-mask-position: left bottom;
+  transition: mask-position 0.3s, -webkit-mask-position 0.3s;
+}
+
+.replayMessage-content{
+  position: relative;
+  background: #2b3748;
+  padding: 10px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+
+}

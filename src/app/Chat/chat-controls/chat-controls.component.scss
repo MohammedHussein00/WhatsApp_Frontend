@@ -1,0 +1,497 @@
+.app-search form .form-control {
+  border: none;
+  height: calc(1.5em + 0.9rem + calc(var(--ct-border-width) * 2));
+  padding-left: 40px;
+  padding-right: 20px;
+  background-color: var(--ct-light);
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.recorder-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .timer {
+    font-size: 18px;
+    margin-top: 5px;
+  }
+
+  .sample-indicator-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 40px;
+  }
+
+  .sample-indicator {
+    display: flex;
+    gap: 1px;
+    align-items: flex-end;
+  }
+
+  .sample-bar {
+    width: 2px;
+    background-color: red;
+    transition: height 0.1s ease;
+    border-radius: 2px;
+  }
+
+  .mirrored {
+    transform: scaleY(-1);
+  }
+
+
+  .recorder-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .timer {
+    font-size: 18px;
+    margin-top: 5px;
+  }
+
+  .sample-indicator-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 40px;
+  }
+
+  .sample-indicator {
+    display: flex;
+    gap: 1px;
+    align-items: flex-end;
+  }
+
+  .sample-bar {
+    width: 2px;
+    background-color: red;
+    transition: height 0.1s ease;
+    border-radius: 2px;
+  }
+
+  .mirrored {
+    transform: scaleY(-1);
+  }
+  ::ng-deep .p-fileupload-choose{
+    background: none!important;
+    border: none!important;
+    padding: 0 !important;
+    color: var(--main-color)!important;
+    box-shadow: none!important;
+    width: fit-content;
+  }
+
+
+
+  // react icons
+
+  .react-menu {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    background: #1e2637;
+    border: 1px solid #ccc;
+    border-radius: 24px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 5px 7px;
+    display: flex;
+    opacity: 0;
+    cursor: pointer;
+    overflow: hidden;
+    gap: 7px;
+    animation: hideMenu 0.3s ease forwards;
+    align-items: center;
+  }
+
+  /* Default position (for normal li) */
+  .conversation-list li:not(.odd) .conversation-text .react-menu {
+    left: calc(100% + 10px);
+    top:calc(50% - 10px);
+    flex-direction: row-reverse;
+  }
+
+  /* Position for odd items */
+  .conversation-list .odd .conversation-text .react-menu {
+    right: 100%;
+  }
+
+  /* Show menu on hover */
+  .conversation-text:hover .react-menu {
+    animation: showMenu 0.3s ease forwards;
+    animation-delay: 0.2s;
+  }
+
+  /* Keyframe animations */
+  @keyframes showMenu {
+    0% {
+      opacity: 0;
+      width: 20px;
+      overflow: hidden;
+    }
+    100% {
+      opacity: 1;
+      width: auto;
+      overflow: visible;
+    }
+  }
+
+  @keyframes hideMenu {
+    0% {
+      opacity: 1;
+      width: auto;
+      overflow: visible;
+    }
+    100% {
+      opacity: 0;
+      width: 20px;
+      overflow: hidden;
+    }
+  }
+
+  /* Initial state for icons */
+  .react-menu .icon {
+    opacity: 0;
+    transition: opacity .3s ease;
+  }
+
+  /* Transition for icons after menu becomes visible */
+  .conversation-text:hover .react-menu .icon {
+    opacity: 1;
+    transition: opacity .3s ease 0.3s;
+  }
+
+
+
+
+
+  .custom-dropdown-menu {
+    position: absolute;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none; /* Hide dropdown from interactions when not visible */
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    z-index: 1050; /* Make sure it's above other content */
+  }
+
+  .custom-dropdown-menu.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .custom-dropdown-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .custom-dropdown-menu li {
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+
+  .custom-dropdown-menu li:hover {
+    background: #f0f0f0;
+  }
+
+
+
+  .emoji-picker-container {
+    position: relative;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+  }
+
+  .emoji-picker {
+    position: absolute;
+    bottom: 100%; /* Position above the button */
+    left: 0;
+    z-index: 1000; /* Ensure it appears above other content */
+    margin-bottom: 5px; /* Adjust space between button and picker */
+  }
+
+  // react icons
+
+  ::ng-deep .mat-mdc-menu-panel{
+    background-color: var(--main-bg-lighter)!important;
+  }
+  ::ng-deep .emoji-mart-dark{
+    background-color: var(--main-bg-lighter);
+  }
+  ::ng-deep .emoji-mart-dark .emoji-mart-category-label span {
+    background-color: #111827;
+  }
+  ::ng-deep .emoji-mart-dark .emoji-mart-search input {
+    color: #fff;
+    border-color: #555453;
+    background-color: #35425b;
+  }
+
+
+  .send-bar{
+    background-color: var(--main-bg-lighter)!important;
+
+  }
+  input{
+    background-color: inherit;
+    color: inherit !important;
+    border: none;
+    transition: all .5s ease;
+  }
+  input:focus{
+    background-color: inherit !important;
+    box-shadow: none;
+    border: none;
+  }
+  input[type="search"]:focus,input[type="search"]{
+    background-color: var(--main-bg-lighter)!important;
+  }
+  input::placeholder{
+    color:var(--main-color);
+  }
+  button{
+    background-color: var(--main-primary);
+  }
+  button:hover{
+    background-color: var(--main-primary-hover);
+  }
+
+  ::ng-deep .pi-paperclip{
+    padding: 0 5px;
+    cursor: pointer;
+  }
+
+
+  .react-menu .icon {
+    opacity: 0;
+    transition: opacity .3s ease;
+  }
+
+  /* Transition for icons after menu becomes visible */
+  .conversation-text:hover .react-menu .icon {
+    opacity: 1;
+    transition: opacity .3s ease 0.3s;
+  }
+
+
+
+  ::ng-deep .replayMessage{
+    width: var(--replayMessage-width)!important;
+    background: #1e2637!important;
+    border: none!important;
+    border-radius: 0px!important;
+    box-shadow: none!important;
+    padding: 10px!important;
+    display: flex;
+    justify-content: flex-end;
+  }
+.replayMessage-content{
+  position: relative;
+  width: calc(var(--replayMessage-content-width) - 20px);
+  background: #2b3748;
+  padding: 10px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+
+}
+
+
+
+
+::ng-deep .AttachmentMenu{
+  left: var(--custom-left)!important;
+  top: var(--custom-top)!important;
+}
+
+.send-attach-ul li{
+  cursor: pointer;
+}
+.send-attach-ul li:hover{
+  background-color:#394b65 ;
+  border-radius: 5px;
+}
+
+.caption-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1c1c1c; /* Black or dark background */
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.caption-input {
+  flex: 1;
+  margin: 0 10px;
+  background: transparent;
+  color: #fff;
+  border: none;
+  outline: none;
+}
+
+.icon-button {
+  background: #2c2c2c;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-button i {
+  color: #fff; /* Icon color */
+}
+
+.icon-button:hover {
+  background-color: #444; /* Hover effect */
+}
+
+.smiley-btn i {
+  font-size: 1.2em;
+}
+
+.refresh-btn i {
+  font-size: 1.2em;
+}
+
+.send-btn {
+  background-color: #28a745; /* Green button for send */
+}
+
+.send-btn i {
+  font-size: 1.2em;
+  color: #fff;
+}
+.toolbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1c1c1c; /* Toolbar background */
+  padding: 5px 10px;
+  border-radius: 8px;
+  max-width: 100%;
+}
+
+.toolbar-button {
+  background: none;
+  border: none;
+  padding: 10px;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.toolbar-button i {
+  font-size: 1.2em;
+  color: #fff; /* Icon color */
+}
+
+.toolbar-button:hover {
+  background-color: #444; /* Hover effect */
+}
+
+.more-options i {
+  font-size: 1.4em;
+}
+
+
+
+.canvas-container {
+  position: relative;
+  display: flex;
+}
+
+.crop-area {
+  position: absolute;
+  border: 2px dashed #00f;
+  cursor: move;
+}
+
+.crop-resizer {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: #00f;
+}
+
+.crop-resizer.top-left {
+  top: -6px;
+  left: -6px;
+  cursor: nwse-resize;
+}
+
+.crop-resizer.bottom-right {
+  bottom: -6px;
+  right: -6px;
+  cursor: nwse-resize;
+}
+
+.toolbar {
+  margin-bottom: 20px;
+}
+
+
+
+.color-picker-container {
+  background-color: #1e2637;
+  color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 250px;
+}
+
+.colors-section p,
+.size-section p {
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+.color-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.color-circle.selected {
+  border-color: #fff;
+}
+
+.size-section {
+  margin-top: 20px;
+}
+
+.size-preview {
+  margin-bottom: 10px;
+}
+
+.size-line {
+  height: 3px;
+  background-color: transparent;
+}

@@ -1,0 +1,182 @@
+::ng-deep.p-menuitem-link .iconoir-chat-lines{
+  position: relative;
+}
+::ng-deep .p-menuitem-link .iconoir-chat-lines::after{
+  content: "";
+  background: white;
+  height: 4px;
+  width: 4px;
+  position: absolute;
+  top: 0px;
+  border-radius: 50%;
+  right: 0px;
+}
+::ng-deep .p-menuitem-icon{
+  color: white;
+  position: relative;
+}
+::ng-deep .p-menuitem-text{
+  font-size: 14px;
+  color: white;
+  font-weight: 300;
+}
+
+::ng-deep  .test::after {
+  bottom: -4px;
+  content: "";
+  height: 11px;
+  width: 11px;
+  transform: rotate(45deg);
+  right: 0px;
+  border-radius: 50%;
+  border: 2px solid white;
+  position: absolute;
+  background-image: linear-gradient(45deg, transparent 2%, transparent 23%, white 23%, white 84%, transparent 86%, transparent 105%);
+  background-size: 2px 11px;
+  background-position: 2.5px;
+  background-repeat: no-repeat;
+}
+
+
+
+.new-chat-panel,.contacts-container{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.contacts-container{
+  padding: 5px;
+  overflow: hidden;
+  overflow-y: scroll;
+  height: 400px;
+
+}
+
+
+.new-group{
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  gap: 10px;
+  cursor: pointer;
+  border-radius: 3px;
+
+}
+.new-group:hover{
+  background-color: #2b3748;
+}
+.new-group i{
+  padding: 12px;
+  border-radius: 50%;
+  background-color: var(--main-bg);
+}
+
+
+.section-title{
+  color: var(--main-color);
+  margin-left: 10px;
+  font-size: 14px;
+}
+.contact-item{
+  display: flex;
+  gap: 5px;
+  padding: 5px;
+
+  cursor: pointer;
+  border-radius: 3px;
+}
+.contact-item:hover{
+  background-color: #2b3748;
+}
+.contact-info{
+  display: flex;
+  flex-direction: column;
+}
+.status{
+  font-size: 14px;
+  color: var(--main-color);
+}
+.profile-image{
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+
+
+//^ overlaypanel react user
+.custom-overlay {
+  background-color: #2b3748;
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  flex-wrap: wrap;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background-color: #2b3748;
+  border-radius: 4px;
+}
+
+.pi {
+  color: white;
+}
+::ng-deep .custom-overlay-panel {
+  left: var(--custom-left)!important;
+  top: var(--custom-top)!important;
+}
+::ng-deep .p-chips-multiple-container,::ng-deep .p-chips{
+  width: 100%;
+}
+
+.new-group-open{
+  width: 100%!important;
+  position: absolute;
+  left: 0;
+  background-color: var(--main-bg-lighter);
+  height: 100%;
+  transform: rotateY(0deg);
+  transition:all 0.2s ease;
+}
+.new-group-close{
+  width: 0!important;
+  left: 100%;
+  transform: rotateY(-90deg);
+  transition:all 0.1s ease;
+
+
+}
+
+
+
+.new-group-open-last-step{
+  width: 100%!important;
+  position: absolute;
+  top: 0;
+  z-index: 5;
+  background-color: var(--main-bg-lighter);
+  height: 100%;
+  transform: rotateX(0deg);
+  transition:all 0.2s ease;
+}
+.new-group-close-last-step{
+  width: 0!important;
+  top: 100%;
+  transform: rotateX(-90deg);
+  transition:all 0.1s ease;
+
+
+}
+
+
+
+.bi-arrow-right:hover{
+  background: #283248;
+}

@@ -7,28 +7,37 @@ import { Receiver, UserDto, SenderType, NewUserToChat } from '../SharedComponent
 export interface ChatMessageDto {
   id: number;
   content: string;
-  react: string;
+  reacts: ReactDto[];
   refMessage: string;
   senderId: string;
   time: Date;
   status: StatusType;
   contentType: ContentType;
+  replayMessageId:number;
   receiver: Receiver;
   senderType: SenderType;
 }
 
+export interface ReactDto {
+  id: number;
+  react: string;
+  messageId: number;
+  userId: string;
+}
+
 // Enum for ContentType
 export enum ContentType {
-  Text = 'Text',
-  File = 'File',
-  Audio = 'Audio'
+  Text = 0,
+  File = 1,
+  Audio = 2
 }
 
 // Enum for StatusType
 export enum StatusType {
-  NotDelivered = 'NotDelivered',
-  Delivered = 'Delivered',
-  Readed = 'Readed'
+  NotDelivered = 0,
+  Delivered = 1,
+  Readed = 2,
+  NotSended=3
 }
 
 
@@ -41,9 +50,9 @@ export class SignalRService {
 
   constructor(private global: GlobalVariablesService) {}
 
-  startConnection = () => {
+  startConnection = (userId: string) => {
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(`${this.global.baseUrl}/chat`)
+      .withUrl(`${this.global.baseUrl}/chat?userId=${userId}`) // Pass userId in the query string
       .build();
 
     return from(
@@ -59,6 +68,7 @@ export class SignalRService {
     );
   };
 
+
   private ensureConnected() {
     return this.isConnected.asObservable().pipe(
       filter(connected => connected),
@@ -66,7 +76,7 @@ export class SignalRService {
     );
   }
 
-  addReceiveMessageListener = (callback: (messages: ChatMessageDto[]) => void) => {
+  addReceiveMessageListener = (callback: (messages: ChatMessageDto) => void) => {
     this.hubConnection?.on('ReceiveMessage', callback);
   };
 
@@ -86,11 +96,38 @@ export class SignalRService {
     });
   };
 
-  sendMessage = (email: string) => {
+  sendMessage = (messageId: number,receiverId:string) => {
     return from(
       this.ensureConnected().toPromise().then(() => {
-        return this.hubConnection?.invoke('SendMessage', email);
+        return this.hubConnection?.invoke('SendMessage', messageId,receiverId);
       }).catch(err => console.error('Error while sending message: ', err))
     );
   };
+
+  readMessages = (userId: string,selectedUserId:string) => {
+    return from(
+      this.ensureConnected().toPromise().then(() => {
+        return this.hubConnection?.invoke('readMessages', userId,selectedUserId);
+      }).catch(err => console.error('Error while sending message: ', err))
+    );
+  };
+  addReact = (userId: string,selectedUserId:string,reactDto:ReactDto) => {
+    return from(
+      this.ensureConnected().toPromise().then(() => {
+        return this.hubConnection?.invoke('addReact', userId,selectedUserId,reactDto);
+      }).catch(err => console.error('Error while sending message: ', err))
+    );
+  };
+
+addReactListener = (callback: (react: ReactDto) => void) => {
+  this.hubConnection?.on('listenerReact', callback);
+};
+
+
+addReedMessagesListener = (callback: (messages: number[]) => void) => {
+  this.hubConnection?.on('ReadMessages', callback);
+};
+addDeliverMessagesListener = (callback: (userId: string) => void) => {
+  this.hubConnection?.on('UpdateUsersMessagesToBeDeliveredExpectNewConnectedUser', callback);
+};
 }

@@ -1,0 +1,112 @@
+<div class="start-page-wrapper">
+  <!-- Steps Navigation on the Left -->
+  <div class="steps-sidebar">
+    <p-steps [model]="items" [activeIndex]="activeIndex" styleClass="steps-vertical"></p-steps>
+    <button *ngIf="activeIndex === 3"  class="next " style="margin-top: 0!important;" pButton  (click)="onProfileSubmit();onNext()" class="btn-next next">Skip</button>
+
+  </div>
+
+  <!-- Form Container on the Right -->
+  <div class="form-container">
+    <!-- Step 1: Welcome Page with Image and Text -->
+    <div *ngIf="activeIndex === 0" class="welcome-step">
+      <img src="assets/wallpapers.jpg" alt="Welcome Image" style="
+      width: 300px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 50%;
+  " class="welcome-image" />
+      <h2 style="color: var(--main-color);">Welcome to Our Chat Service</h2>
+      <p style="color: var(--main-color);">This is a great platform to connect with your friends and colleagues in real-time.</p>
+      <button  class="next" pButton  (click)="onNext()" class="btn-next next">Next</button>
+    </div>
+
+    <!-- Step 2: Email Input Form -->
+    <div *ngIf="activeIndex === 1" style="width: inherit;">
+      <form [formGroup]="emailForm" (ngSubmit)="onEmailVerificationSubmit()">
+        <div class="input-group">
+
+          <p-iconField style="width: 100%;" iconPosition="left">
+            <p-inputIcon styleClass="pi pi-envelope"></p-inputIcon>
+            <input class="email" type="email" pInputText placeholder="Email" formControlName="email"
+            [class]="{'ng-invalid': emailForm.get('email')?.invalid && emailForm.get('email')?.touched, 'ng-dirty': emailForm.get('email')?.errors?.['required']}"
+
+            />
+          </p-iconField>
+          <div style="min-height: 20px;">
+            <div style="height: 20px;display: flex;align-items: flex-start;"  class="validation-error">
+              <small class="ng-invalid ng-dirty" style="font-size: .80em;color:#fca5a5;"  *ngIf="emailForm.controls['email'].value===''&& emailForm.controls['email'].touched" >* Email is required.</small>
+              <small class="ng-invalid ng-dirty" style="font-size: .80em;color:#fca5a5;" *ngIf="emailForm.controls['email'].invalid&&emailForm.controls['email'].value!==''&& emailForm.controls['email'].touched" > * Must be a valid email.</small>
+            </div>
+            </div>
+
+            </div>
+
+        <div class="button-group">
+          <button  type="button" pButton (click)="onBack()" class="btn-back back">Back</button>
+          <button  type="submit" pButton [disabled]="!emailForm.valid" class="btn-next next">Next</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Step 3: Verification Code Form -->
+    <div *ngIf="activeIndex === 2" style="width: inherit;">
+      <form [formGroup]="verificationForm" (ngSubmit)="onVerificationSubmit()">
+        <div style="display: flex;flex-direction: column;gap: 15px;">
+          <label for="code">Enter Verification Code</label>
+          <p-inputOtp style="display: flex;justify-content: space-between;" formControlName="code" [integerOnly]="true" [length]="6"/>
+          <p style="color: var(--main-color);">Are you recieve any code?</p>
+          <p *ngIf="showIncorrectverificationCodeMessage"   style="color: red;">Incorrect verification code.
+            <br>
+            Try to write correct code or back and use your correct email!
+          </p>
+          <a  class="resend-code" >Resend verification code again</a>
+        </div>
+        <div class="button-group">
+          <button type="button" pButton (click)="onBack()" class="btn-back back">Back</button>
+          <button class="next" type="submit" pButton [disabled]="!verificationForm.valid" class="btn-next next">Verify</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Step 4: Profile Information Form -->
+    <div *ngIf="activeIndex === 3" style="width: inherit;">
+      <form [formGroup]="profileForm" (ngSubmit)="onProfileSubmit()">
+
+        <div class="d-flex flex-column align-items-center text-center p-3 mb-3" style="
+        position: relative;
+        width: fit-content;
+        margin: auto;">
+          <img *ngIf="!base64" class="rounded-circle bg-light" style="width:200px;height:200px;object-fit:cover;" src="assets/profile1.png" alt="">
+          <img *ngIf="base64" class="rounded-circle bg-light" style="width: 200px;height:200px;object-fit:cover;" src="{{base64}}" alt="">
+          <label class="poster  mt-5" for="poster" style="position: absolute;cursor: pointer;">
+            <span
+            style="bottom: 4px;background: var(--main-primary);padding: 13px 17px;border-radius: 50%;color: white;right: -19px;font-size: 20px;"
+            >
+              <i class="bi bi-camera"></i>
+            </span>
+          </label>
+          <input hidden type="file"  name="poster" id="poster" (change)="onchange($event)"  accept="image/*" placeholder="" >
+        </div>
+
+
+
+
+
+
+        <div class="d-flex flex-column mb-3 gap-1">
+          <label for="name">Name</label>
+          <input id="name" type="text" formControlName="name" pInputText required />
+        </div>
+        <div class="d-flex flex-column mb-3 gap-1">
+          <label for="about">About</label>
+          <input id="about" type="text" formControlName="about" pInputText required />
+        </div>
+        <div class="button-group">
+          <button type="button" pButton (click)="onBack()" class="btn-back back">Back</button>
+          <button type="submit" pButton class="btn-submit next">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

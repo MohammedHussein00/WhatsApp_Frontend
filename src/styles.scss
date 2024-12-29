@@ -12,7 +12,10 @@ ul{
 
 :root {
   --bs-gutter-x: 0;
-
+  --custom-left: 0px; /* Default value */
+  --custom-top:0px;
+  --replayMessage-width:0px;
+  --replayMessage-content-width:0px;
   --main-bg:#111827;
   --main-bg-lighter:#1e2637;
   --main-color:#8c9095;

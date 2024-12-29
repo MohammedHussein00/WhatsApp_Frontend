@@ -1,0 +1,199 @@
+<p-menu #sortMenu [model]="sortByItems" [popup]="true" />
+<p-overlayPanel #newGroup (onHide)="newGroupIsOpen=false">
+  <div class="new-chat-panel" style="gap: 8px;position: relative;">
+    <h6 style="margin: 0;padding: 10px 0 0 18px;">New Chat</h6>
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <input pInputText type="text" placeholder="Search name or number" />
+      <p-button icon="pi pi-ellipsis-v" class="p-button-rounded p-button-text"></p-button>
+    </div>
+    <div class="contacts-container">
+      <!-- New Group Section -->
+      <div class="new-group" (click)="newGroupIsOpen=!newGroupIsOpen">
+        <i class="pi pi-users"></i>
+        <p>New Group</p>
+      </div>
+
+      <!-- Message Yourself -->
+      <div class="contact-item">
+        <img src="assets/profile1.png" alt="Profile" class="profile-image" />
+        <div class="contact-info">
+          <span class="name">(You) محمد حسين</span>
+          <span class="status">Message yourself</span>
+        </div>
+      </div>
+
+      <!-- Frequently Contacted -->
+      <div class="section-title">Frequently contacted</div>
+      <div class="d-flex flex-column" style="gap: 10px;">
+        <div class="contact-item" *ngFor="let contact of frequentlyContacted">
+          <img [src]="contact.image" alt="Contact" class="profile-image" />
+          <div class="contact-info">
+            <span class="name">{{ contact.name }}</span>
+            <span class="status">{{ contact.status }}</span>
+          </div>
+        </div>
+      </div>
+      <!-- All Contacts -->
+      <div class="section-title">All contacts</div>
+
+      <div class="contact-item" *ngFor="let contact of allContacts">
+        <img [src]="contact.image" alt="Contact" class="profile-image" />
+        <div class="contact-info">
+          <span class="name">{{ contact.number }}</span>
+          <span class="status">{{ contact.status }}</span>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <!-- create new group menu -->
+    <div class="" style="position: absolute;width: 0;padding: 10px;" [ngClass]="{
+    'new-group-open': newGroupIsOpen,
+    'new-group-close':!newGroupIsOpen}">
+
+
+      <div class="d-flex" style="gap: 10px; align-items: center;">
+        <i role="button" class="bi bi-arrow-right" style="padding: 5px;border-radius: 5px;"
+          (click)="newGroupIsOpen=false"></i>
+
+        <h5 style="margin: 0!important;">New group</h5>
+
+      </div>
+
+
+      <p-chips [formControl]="values" placeholder="Search" (input)="onInput($event)" (onRemove)="onChipRemoved($event)">
+      </p-chips>
+
+
+      <div *ngIf="newGroupDto.groupMembers.length>0" clas="d-flex"
+        style="display:flex;width: 100%;justify-content: space-between;">
+        <button type="button" class="btn btn-primary" style="width: 48%;" (click)="newGroupIsOpenLastStep=true">Next</button>
+        <button type="button" class="btn btn-secondry"
+          style="background: #313d58;color: #ffffff;width: 48%;">Cancel</button>
+      </div>
+      <div style="position: relative;">
+
+        <div style="position: absolute;" [ngClass]="{
+          'new-group-open-last-step': newGroupIsOpenLastStep,
+          'new-group-close-last-step':!newGroupIsOpenLastStep}">
+          <div class="group-creation-container">
+            <p-fileUpload mode="basic" name="groupIcon" customUpload="true" class="group-icon-upload">
+              <span>Add group icon (optional)</span>
+            </p-fileUpload>
+
+            <div class="form-group">
+              <label for="groupName">Provide a group name</label>
+              <div class="p-inputgroup">
+                <input
+                  type="text"
+                  id="groupName"
+                  pInputText
+                  placeholder="Group name (optional)"
+                />
+                <button type="button" pButton icon="pi pi-smile" class="p-button-text"></button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="disappearingMessages">Disappearing messages</label>
+
+              <small>All new messages in this chat will disappear after the selected duration.</small>
+            </div>
+
+            <div class="button-group">
+              <button pButton label="Create" class="p-button-success"></button>
+              <button pButton label="Cancel" class="p-button-secondary"></button>
+            </div>
+          </div>
+
+        </div>
+
+
+        <br>
+        <p>All Contacts</p>
+        <div class="contact-item" *ngFor="let contact of users;let i=index">
+          <img [src]="contact.imageUrl" alt="Contact" class="profile-image" />
+          <div class="contact-info">
+            <span class="name">{{ contact.name }}</span>
+            <span class="status">{{ contact.status }}</span>
+          </div>
+          <p-checkbox [(ngModel)]="isMemberAddedToNewGroup[i]" [binary]="true"
+            (onChange)="onCheckboxChange(contact.id, $event.checked,i)"></p-checkbox>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+</p-overlayPanel>
+
+
+<!--^ react user menu -->
+<p-overlayPanel #reactUserMenu styleClass="custom-overlay-panel">
+  <div class="p-1">
+
+    <div class="menu-item">
+      <i class="bi bi-arrow-90deg-right" style="font-size: 1rem; margin-right: 10px;"></i>
+      <div>Reply</div>
+    </div>
+
+    <div class="menu-item">
+      <i class="pi pi-copy" style="font-size: 1rem; margin-right: 10px;"></i>
+      <div>Copy</div>
+    </div>
+    <hr style="width: 100%;margin: 0;">
+
+    <div class="menu-item">
+      <i class="bi bi-arrow-90deg-left" style="font-size: 1rem; margin-right: 10px;"></i>
+      <div>Forward</div>
+    </div>
+    <div class="menu-item">
+      <i class="pi pi-star" style="font-size: 1rem; margin-right: 10px;"></i>
+      <div>Star</div>
+    </div>
+
+    <div class="menu-item">
+      <i class="bi bi-pin-angle" style="font-size: 1rem; margin-right: 10px;"></i>
+      <div>Pin</div>
+    </div>
+    <div class="menu-item">
+      <i class="pi pi-trash" style="font-size: 1rem; margin-right: 10px;"></i>
+      <div>Delete</div>
+    </div>
+    <hr style="width: 100%;margin: 0;">
+    <div class="menu-item">
+      <i class="pi pi-check-square" style="font-size: 1rem; margin-right: 10px;"></i>
+      <div>Select</div>
+    </div>
+    <div class="menu-item">
+      <i class="pi pi-share-alt" style="font-size: 1rem; margin-right: 10px;"></i>
+      <div>Share</div>
+    </div>
+
+
+    <div class="d-flex" style="gap: 10px;">
+      <p style="font-size: 25px;">👍</p>
+      <p style="font-size: 25px;">❤️</p>
+      <p style="font-size: 25px;">😂</p>
+      <p style="font-size: 25px;">😮</p>
+      <p style="font-size: 25px;">😭</p>
+      <p style="font-size: 25px;">🙏</p>
+      <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="">
+      <i class="pi pi-plus" style="padding: 5px;border: 1px solid;border-radius: 50%;"></i>
+
+    </div>
+  </div>
+</p-overlayPanel>
+
+
+
+<p-overlayPanel #createGroupMenu styleClass="custom-overlay-panel">
+  test
+</p-overlayPanel>

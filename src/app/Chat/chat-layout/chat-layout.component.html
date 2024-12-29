@@ -1,0 +1,18 @@
+<div class="row w-100 m-auto" style="height: 100vh; padding: 0">
+  <div
+    class="col-xxl-4 col-xl-5 order-xl-1 p-0"
+    style="border-radius: 0; height: 100%; padding-right: 12px"
+  >
+    <app-chated-users ></app-chated-users>
+  </div>
+  <div
+    class="col-xxl-8 col-xl-7 order-xl-1 p-0"
+    style="border-radius: 0; height: 100%"
+  >
+<div class="card justify-content-between">
+
+    <app-messages></app-messages>
+    <app-chat-controls *ngIf="selectedUser"></app-chat-controls>
+</div>
+  </div>
+</div>

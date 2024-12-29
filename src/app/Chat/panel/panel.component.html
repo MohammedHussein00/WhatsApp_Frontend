@@ -1,0 +1,212 @@
+<div
+  class="d-flex flex-column justify-content-between h-100"
+  style="position: sticky; z-index: 3000; padding: 1rem"
+>
+  <div class="d-flex flex-column justify-content-between" style="gap: 10px">
+    <span
+      class="icon-content"
+      (click)="sidebarVisible = !sidebarVisible"
+      style="width: fit-content"
+    >
+      <i class="lg-open bi bi-list nav-icon"></i>
+      <div class="active-line"></div>
+    </span>
+
+    <span
+      class="icon-content"
+      (click)="setActive('chats', $event)"
+      [ngStyle]="{
+        'background-color': previousIndex === 1 ? '#2b3748' : 'inherit'
+      }"
+    >
+      <i class="iconoir-chat-lines" style="font-size: 17px"></i>
+      <p *ngIf="sidebarVisible" style="font-size: inherit">Chats</p>
+      <div class="active-line"></div>
+    </span>
+
+    <span
+      class="icon-content"
+      (click)="setActive('calls', $event)"
+      [ngStyle]="{
+        'background-color': previousIndex === 2 ? '#2b3748' : 'inherit'
+      }"
+    >
+      <i class="lg-open bi bi-telephone nav-icon"></i>
+      <p *ngIf="sidebarVisible" style="font-size: inherit">Calls</p>
+      <div class="active-line"></div>
+    </span>
+
+    <span
+      class="icon-content"
+      (click)="setActive('updates', $event)"
+      [ngStyle]="{
+        'background-color': previousIndex === 3 ? '#2b3748' : 'inherit'
+      }"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        style="height: 34px; width: 20px"
+        fill="#fff"
+        viewBox="0 0 256 256"
+      >
+        <circle
+          cx="128"
+          cy="128"
+          r="104"
+          fill="none"
+          stroke="#fff"
+          stroke-width="8"
+          stroke-dasharray="72%, 12%"
+        />
+        <circle
+          cx="128"
+          cy="128"
+          stroke-width="8"
+          r="60"
+          fill="none"
+          stroke="#fff"
+        />
+      </svg>
+      <p *ngIf="sidebarVisible" style="font-size: inherit">Updates</p>
+      <div class="active-line"></div>
+    </span>
+  </div>
+
+  <div class="d-flex flex-column justify-content-between">
+    <span
+      class="icon-content"
+      (click)="setActive('Started', $event)"
+      [ngStyle]="{
+        'background-color': previousIndex === 4 ? '#2b3748' : 'inherit'
+      }"
+    >
+      <i class="lg-open bi bi-star nav-icon"></i>
+      <p *ngIf="sidebarVisible" style="font-size: inherit">Started messages</p>
+      <div class="active-line"></div>
+    </span>
+    <span
+      class="icon-content"
+      (click)="setActive('archived', $event)"
+      [ngStyle]="{
+        'background-color': previousIndex === 5 ? '#2b3748' : 'inherit'
+      }"
+    >
+      <i class="lg-open bi bi-archive nav-icon"></i>
+      <p *ngIf="sidebarVisible" style="font-size: inherit">Archived Chats</p>
+      <div class="active-line"></div>
+    </span>
+    <hr />
+    <span
+      class="icon-content"
+      (click)="op.toggle($event)"
+      [ngStyle]="{ width: sidebarVisible ? 'auto' : 'fit-content' }"
+    >
+      <i class="lg-open bi bi-gear nav-icon"></i>
+      <p *ngIf="sidebarVisible" style="font-size: inherit">Settings</p>
+    </span>
+    <span
+      class="icon-content"
+      (click)="op.toggle($event)"
+      [ngStyle]="{ width: sidebarVisible ? 'auto' : 'fit-content' }"
+    >
+      <img
+        [src]="
+          global.currentUserImage
+            ? global.currentUserImage
+            : 'assets/profile1.png'
+        "
+        style="width: 25px; height: 41px; border-radius: 50%; padding: 8px 0"
+        alt=""
+      />
+      <p *ngIf="sidebarVisible" style="font-size: inherit">Profile</p>
+    </span>
+  </div>
+</div>
+
+<p-sidebar [(visible)]="sidebarVisible"> </p-sidebar>
+
+<p-overlayPanel #op>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <ul>
+        <li><i class="pi pi-cog"></i> General</li>
+        <li>
+          <i
+            class="bi bi-key"
+            style="
+              transform: rotate(45deg);
+              font-size: 20px;
+              padding: 0 !important;
+            "
+          ></i>
+          Account
+        </li>
+        <li><i class="pi pi-comments"></i> Chats</li>
+        <li><i class="pi pi-video"></i> Video & Voice</li>
+        <li><i class="pi pi-bell"></i> Notifications</li>
+        <li><i class="pi pi-palette"></i> Personalization</li>
+        <li><i class="pi pi-database"></i> Storage</li>
+        <li>
+          <i
+            class="bi bi-keyboard"
+            style="font-size: 20px; padding: 0 !important"
+          ></i>
+          Shortcuts
+        </li>
+        <li><i class="pi pi-question-circle"></i> Help</li>
+        <br />
+        <br />
+        <li><i class="pi pi-user"></i>Profile</li>
+      </ul>
+    </div>
+
+    <!-- Profile Section -->
+    <div class="profile-section">
+      <div class="profile-header flex-column">
+        <p-avatar
+          image="{{
+            global.currentUserImage ? global.currentUserImage : 'profile1.png'
+          }}"
+          size="xlarge"
+          shape="circle"
+        ></p-avatar>
+        <div class="d-flex justify-content-between w-100">
+          <h5>{{ global.currentUserName ? global.currentUserName : "~" }}</h5>
+          <p><i class="pi pi-pencil"></i></p>
+        </div>
+      </div>
+
+      <div class="profile-details">
+        <div class="about">
+          <span>About</span>
+          <div class="d-flex justify-content-between w-100">
+            <p>
+              {{ global.currentUserAbout ? global.currentUserAbout : "~" }}
+            </p>
+            <i class="pi pi-pencil"></i>
+          </div>
+        </div>
+
+        <div class="phone-number">
+          <span>Email adress</span>
+          <p>{{ global.currentUserEmail ? global.currentUserEmail : "~" }}</p>
+        </div>
+      </div>
+
+      <p-divider></p-divider>
+
+      <div class="logout-section">
+        <button
+          pButton
+          type="button"
+          label="Log out"
+          icon="pi pi-sign-out"
+        ></button>
+        <p class="logout-info">
+          Chat history on this computer will be cleared when you log out.
+        </p>
+      </div>
+    </div>
+  </div>
+</p-overlayPanel>

@@ -1,0 +1,434 @@
+<div class="card-body p-0 parent-for-width">
+ <div class="row">
+    <div class="col">
+      <div class="send-bar bg-light " style="padding: 1rem 0;margin: 0;">
+        <form
+          [formGroup]="messageForm"
+          class="needs-validation"
+          novalidate=""
+          name="chat-form"
+          id="chat-form"
+        >
+          <div class="row">
+            <div *ngIf="!isRecording && !audioURL" class="emoji-picker-container">
+              <!-- Emoji picker button -->
+              <i (click)="toggleEmojiPicker()" class="icon bi bi-emoji-smile"></i>
+
+              <!-- Emoji picker -->
+              <div *ngIf="isEmojiPickerVisible" class="emoji-picker">
+                <emoji-mart
+                  class="picker"
+                  color="var(--str-chat__primary-color)"
+                  title="Pick your emoji…"
+                  emoji="point_up"
+                  (emojiSelect)="onEmojiSelect($event)"
+                ></emoji-mart>
+              </div>
+            </div>
+
+
+
+
+            <div style="width: fit-content;display: flex;align-items: center;padding: 0 8px;">
+              <i class="pi pi-paperclip" (click)="sendAttachmentMenu.toggle($event)"></i>
+            <!-- <p-fileUpload
+            mode="basic"
+            chooseIcon=""
+            name="demo[]"
+            url="https://www.primefaces.org/cdn/api/upload.php"
+            accept="image/*"
+            maxFileSize="1000000"
+            *ngIf="!isRecording && !audioURL"
+            i18n="@@chat.attachFile"
+            styleClass=" ml-2"
+             /> -->
+
+            </div>
+
+
+
+
+
+
+            <div class="col mb-2 mb-sm-0 controls" style="display: flex;gap: 10px;padding-right: 10px;justify-content: flex-end;">
+              <input
+                *ngIf="!isRecording && !audioURL"
+                type="text"
+                class="form-control border-0 "
+                placeholder="Enter your text"
+                required=""
+                formControlName="content"
+                style="font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif"
+
+              />
+
+
+
+
+              <div class="recorder-container"  *ngIf="messageForm.controls['content'].value===''">
+                <button
+                  *ngIf="!isRecording && !audioURL"
+                  (click)="startRecording()"
+                  [disabled]="isRecording"
+                  style="background: none; border: none;padding: 0;"
+                >
+                  <i class="bi bi-mic"></i>
+                </button>
+                <button
+                  *ngIf="isRecording"
+                  (click)="stopRecording()"
+                  [disabled]="!isRecording"
+                >
+                  Stop Recording
+                </button>
+                <span *ngIf="isRecording" class="timer">{{
+                  elapsedTime
+                }}</span>
+
+                <!-- Sample Indicator -->
+                <div
+                  *ngIf="isRecording"
+                  class="sample-indicator-container"
+                >
+                  <div class="sample-indicator">
+                    <div
+                      *ngFor="let sample of samples"
+                      class="sample-bar"
+                      [style.height]="sample.height"
+                    ></div>
+                  </div>
+
+                  <!-- Mirrored Sample Indicator -->
+                  <div class="sample-indicator mirrored">
+                    <div
+                      *ngFor="let sample of samples"
+                      class="sample-bar"
+                      [style.height]="sample.height"
+                    ></div>
+                  </div>
+                </div>
+
+                <button *ngIf="isRecording || audioURL" (click)="removeRecording()" style="background: none; border: none">
+                  <i class="bi bi-trash"></i>
+                </button>
+                <div *ngIf="audioBlob&&!isRecording" style="display: flex;align-items: center;gap: 27px;border: 1px solid;padding:2px 5px;border-radius: 63px;">
+                  <i *ngIf="chatControls.wavesurfer?.isPlaying()" class="bi bi-pause" (click)="chatControls.wavesurfer.pause()"></i>
+                  <i *ngIf="!chatControls.wavesurfer?.isPlaying()" class="bi bi-play-fill" (click)="chatControls.wavesurfer.play()"></i>
+                  <div id="waveform" #waveform style="width: 150px"></div>
+                  <div style="padding: 5px; border-right: 1px solid black; color: white">
+                    <small>{{ hours }}</small
+                    >: <small>{{ minutes }}</small
+                    >:
+                    <small style="width: 41px; padding: 0">{{
+                      currentTimeInSeconds
+                    }}</small>
+                  </div>
+                </div>
+              </div>
+
+
+
+
+              <div class="d-grid" *ngIf="messageForm.controls['content'].value!==''||(audioBlob&&!isRecording)">
+                <button
+                  (click)="sendMessage()"
+                  type="button"
+                  class="btn btn-success chat-send"
+                >
+                  <i class="bi bi-send"></i>
+                </button>
+              </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+              </div>
+            <!-- end col -->
+          <!-- end row-->
+        </form>
+      </div>
+    </div>
+    <!-- end col-->
+  </div>
+  <!-- end row -->
+</div>
+
+
+
+
+<p-overlayPanel #replayMessageMenu styleClass="replayMessage"  [dismissable]="false" (onHide)="isMenuOpen=false">
+  <div class="replayMessage-content" >
+    <i class="bi bi-x-circle" style="position: absolute;right: 6px;cursor: pointer;" (click)="replayMessageMenu.hide()"></i>
+    <div style="font-size: 12px;color: var(--main-primary);">{{replayedMessage?.name}}</div>
+    <div style="font-size: 12px;">{{replayedMessage?.content}}</div>
+  </div>
+</p-overlayPanel>
+
+<!--^ send attachment menu -->
+<p-overlayPanel #sendAttachmentMenu styleClass="sendAttachmentMenu" >
+  <ul class="send-attach-ul" style="padding: 10px 3px!important; margin: 0;">
+    <!-- Input for Photos & Videos -->
+    <input
+      type="file"
+      accept="image/*,video/*"
+      #photosVideosInput
+      (change)="handlePhotosVideosInput($event, sendAttachmentMenu,AttachmentMenu)"
+      hidden
+    />
+
+    <!-- Input for All Files Except Images & Videos -->
+    <input
+      type="file"
+      #document
+      (change)="handleDocumentInput($event, sendAttachmentMenu,AttachmentMenu)"
+      multiple
+      hidden
+    />
+
+    <!-- List Items -->
+    <li
+      class="d-flex align-items-center px-2 py-1"
+      style="gap:10px"
+      (click)="photosVideosInput.click();sendAttachmentMenu.hide()"
+
+    >
+      <i class="bi bi-image-fill"></i>
+      <p>Photos & Videos</p>
+    </li>
+
+    <li class="d-flex align-items-center px-2 py-1" style="gap:10px">
+      <i class="bi bi-camera"></i>
+      <p>Camera</p>
+    </li>
+
+    <li
+      class="d-flex align-items-center px-2 py-1"
+      style="gap:10px"
+      (click)="sendAttachmentMenu.hide();document.click()"
+    >
+      <i class="bi bi-file-earmark"></i>
+      <p>Document</p>
+    </li>
+
+    <li class="d-flex align-items-center px-2 py-1" style="gap:10px">
+      <i class="bi bi-person-lines-fill"></i>
+      <p>Contact</p>
+    </li>
+
+    <li class="d-flex align-items-center px-2 py-1" style="gap:10px">
+      <i class="fa-solid fa-square-poll-horizontal"></i>
+      <p>Poll</p>
+    </li>
+
+    <li class="d-flex align-items-center px-2 py-1" style="gap:10px">
+      <i class="fa-solid fa-square-poll-horizontal"></i>
+      <p>Call Link</p>
+    </li>
+
+    <li class="d-flex align-items-center px-2 py-1" style="gap:10px">
+      <i class="fa-solid fa-square-poll-horizontal"></i>
+      <p>Drawing</p>
+    </li>
+  </ul>
+</p-overlayPanel>
+
+<p-overlayPanel #AttachmentMenu styleClass="AttachmentMenu" [dismissable]="false"   >
+
+  <div class="toolbar-container">
+    <button class="toolbar-button">
+      <i class="fa-solid fa-pen"></i>
+    </button>
+    <button class="toolbar-button" (click)="setMode('draw');selectedSize=5;selectedColor='#000000'" style="position: relative;" [ngStyle]="{ 'background-color': mode === 'draw' ? '#444' : 'transparent' }"
+    >
+      <i class="bi bi-pencil"></i>
+      <i class="bi bi-chevron-down" *ngIf="mode==='draw'" (click)="colorsOverlayPanel.toggle($event)" style="position: absolute;bottom: -1px;color: var(--main-primary);font-size: 12px;"></i>
+    </button>
+    <button class="toolbar-button" (click)="setMode('highlight');selectedSize=10;selectedColor='#ffff005e'" style="position: relative;" [ngStyle]="{ 'background-color': mode === 'highlight' ? '#444' : 'transparent' }">
+      <i class="bi bi-highlighter"></i>
+      <i class="bi bi-chevron-down" *ngIf="mode==='highlight'" (click)="highlightColorsOverlayPanel.toggle($event)" style="position: absolute;bottom: -1px;color: var(--main-primary);font-size: 12px;"></i>
+    </button>
+    <button class="toolbar-button" (click)="setMode('erase')" style="position: relative;" [ngStyle]="{ 'background-color': mode === 'erase' ? '#444' : 'transparent' }">
+      <i class="bi bi-eraser"></i>
+    </button>
+    <button class="toolbar-button" (click)="undo()">
+      <i class="bi bi-arrow-90deg-left"></i>
+    </button>
+    <button class="toolbar-button" (click)="redo()">
+      <i class="bi bi-arrow-90deg-right"></i>
+    </button>
+    <button class="toolbar-button">
+      <i class="bi bi-arrow-clockwise"></i>
+    </button>
+    <button class="toolbar-button" (click)="setMode('crop')"   [ngStyle]="{ 'background-color': mode === 'crop' ? '#444' : 'transparent' }"
+    >
+      <i class="fa-solid fa-crop"></i>
+    </button>
+    <button class="toolbar-button" (click)="confirmResize()">
+      <i class="fa-solid fa-crop"></i>
+    </button>
+    <button class="toolbar-button" (click)="removeImage(AttachmentMenu)">
+      <i class="pi pi-trash"></i>
+    </button>
+    <button class="toolbar-button more-options">
+      <i class="pi pi-ellipsis-h"></i>
+    </button>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+  <div class="canvas-container" style="max-height: 450px;">
+    <canvas #canvas (mousedown)="startDrawing($event)" (mousemove)="draw($event)" (mouseup)="stopDrawing()" (mouseleave)="stopDrawing()"></canvas>
+  </div>
+
+  <div class="crop-area" #cropArea
+       *ngIf="mode==='crop'"
+       [ngStyle]="{ 'left.px': cropStyles.x, 'top.px': cropStyles.y, 'width.px': cropStyles.width, 'height.px': cropStyles.height }"
+       (mousedown)="startMoveCrop($event)">
+    <div class="crop-resizer top-left" (mousedown)="startCropResize($event, 'top-left')"></div>
+    <div class="crop-resizer top-right" (mousedown)="startCropResize($event, 'top-right')"></div>
+    <div class="crop-resizer bottom-left" (mousedown)="startCropResize($event, 'bottom-left')"></div>
+    <div class="crop-resizer bottom-right" (mousedown)="startCropResize($event, 'bottom-right')"></div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="caption-container">
+    <div class="icon-left">
+      <button class="icon-button smiley-btn">
+        <i class="pi pi-face-smile"></i>
+      </button>
+    </div>
+
+    <input
+      type="text"
+      class="caption-input"
+      placeholder="Caption (optional)"
+    />
+    <button class="icon-button refresh-btn">
+      <i class="pi pi-refresh"></i>
+    </button>
+
+  </div>
+    <div class="icon-right">
+      <button class="icon-button send-btn" (click)="saveImage();sendMessage(); this.showConfirmDialog = false;
+      this.isOverlayVisible = false;
+      attachmentMenu.hide();">
+        <i class="pi pi-send"></i>
+      </button>
+      <button class="icon-button send-btn">
+        <i class="pi pi-plus"></i>
+      </button>
+  </div>
+
+
+</p-overlayPanel>
+
+
+
+<p-overlayPanel #colorsOverlayPanel >
+  <div class="color-picker-container">
+    <!-- Colors Section -->
+    <div class="colors-section">
+      <p>Colors</p>
+      <div class="color-grid">
+        <div
+          *ngFor="let color of colors"
+          [ngStyle]="{ 'background-color': color }"
+          class="color-circle"
+          (click)="selectColor(color)"
+          [class.selected]="color === selectedColor">
+        </div>
+      </div>
+    </div>
+
+    <!-- Size Section -->
+    <div class="size-section">
+      <p>Size</p>
+      <div class="size-preview">
+        <div style="height: 25px;width: 100%;">
+        <div
+          class="size-line"
+          [ngStyle]="{ 'height': selectedSize + 'px', 'background': selectedColor }" style="width: 100%;">
+        </div>
+      </div>
+      </div>
+      <p-slider [(ngModel)]="selectedSize" [min]="1" [max]="25"></p-slider>
+    </div>
+  </div>
+
+  </p-overlayPanel>
+
+  <p-overlayPanel #highlightColorsOverlayPanel >
+    <div class="color-picker-container">
+      <!-- Colors Section -->
+      <div class="colors-section">
+        <p>Colors</p>
+        <div class="color-grid">
+          <div
+            *ngFor="let color of highlightColors"
+            [ngStyle]="{ 'background-color': color }"
+            class="color-circle"
+            (click)="selectColor(color)"
+            [class.selected]="color === selectedColor">
+          </div>
+        </div>
+      </div>
+
+      <!-- Size Section -->
+      <div class="size-section">
+        <p>Size</p>
+        <div class="size-preview">
+          <div style="height: 25px;width: 100%;">
+          <div
+            class="size-line"
+            [ngStyle]="{ 'height': selectedSize + 'px', 'background': selectedColor }" style="width: 100%;">
+          </div>
+        </div>
+        </div>
+        <p-slider [(ngModel)]="selectedSize" [min]="1" [max]="25"></p-slider>
+      </div>
+    </div>
+
+    </p-overlayPanel>
+  <p-dialog
+  #colseAttachmentMenuDialog
+  [(visible)]="showConfirmDialog"
+  [modal]="true"
+  [closable]="false"
+  header="Discard unsent message?"
+  [baseZIndex]="1100"
+>
+  <p style="font-size: 12px;">Your message, including attached media, will not be sent if you leave this screen.</p>
+  <br>
+  <div class="p-dialog-footer w-100 d-flex justify-content-between">
+    <button style="width: 45%;" pButton label="Discard"  (click)="confirmClose(attachmentMenu)"></button>
+    <button style="width: 45%;background: var(--main-bg);" pButton label="Return to media" (click)="cancelClose()"></button>
+  </div>
+</p-dialog>

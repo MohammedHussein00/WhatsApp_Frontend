@@ -1,0 +1,162 @@
+.nav-tabs.nav-bordered {
+  border-bottom: 2px solid var(--ct-border-color);
+}
+
+
+.app-search form .form-control {
+  border: none;
+  height: calc(1.5em + 0.9rem + calc(var(--ct-border-width) * 2));
+  padding-left: 40px;
+  padding-right: 20px;
+  background-color: var(--main-bg-lighter);
+  -webkit-box-shadow: none;
+  box-shadow: none;
+
+}
+.form-control::placeholder{
+  color:var(--main-color);
+}
+.form-control:focus {
+  color: var(--main-color);
+  background-color: var(--main-bg-lighter);
+  border-color: var(--ct-border-color);
+  outline: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.card{
+  color: var(--main-color);
+  background-color: var(--main-bg);
+  width: 100%;
+  margin: auto;
+  height: 100%;
+  border-radius: 0!important;
+}
+.conversation-list .message-p .chat-avatar img {
+  border-radius: 100%;
+  width: 100%;
+}
+.rounded {
+  border-radius: 0.25rem!important;
+}
+.conversation-list .message-p .chat-avatar i {
+  font-size: 12px;
+  font-style: normal;
+}
+.user-card{
+  border-radius: 5px;
+  user-select:none;
+  transition: all .3s ease;
+}
+.user-card:hover{
+  background-color: rgb(43 55 72)!important;
+}
+
+.searchForUser:focus{
+  border-color: #1e73be!important;
+  color:white;
+}
+h5 {
+  color: white;
+  font-size: 1rem;
+}
+.text-muted {
+  --bs-text-opacity: 1;
+  color: var(--main-color) !important;
+  font-size: smaller;
+}
+
+.tab-content::-webkit-scrollbar {
+   width: 10px; /* Default scrollbar width */
+  transition: width 0.3s ease;
+  background-color: #55555500;
+}
+
+.tab-content::-webkit-scrollbar-track {
+  background: #1e2637;
+  border: 2px solid #111827;
+}
+
+.tab-content::-webkit-scrollbar-thumb {
+  background: #1e2637;
+  border-radius: 4px;
+  border: 2px solid #111827;
+}
+
+
+
+
+
+
+.tab-content {
+  overflow-y: scroll;
+  mask-image: linear-gradient(to top, transparent, black),
+    linear-gradient(to left, transparent 17px, black 17px);
+  mask-size: 100% 20000px;
+  mask-position: left bottom;
+  -webkit-mask-image: linear-gradient(to top, transparent, black),
+    linear-gradient(to left, transparent 17px, black 17px);
+  -webkit-mask-size: 100% 20000px;
+  -webkit-mask-position: left bottom;
+  transition: mask-position 0.3s, -webkit-mask-position 0.3s;
+}
+
+.tab-content:hover {
+  -webkit-mask-position: left top;
+}
+
+
+.nav-link{
+  background-color: var(--main-bg-lighter)!important;
+  border-bottom-color:var(--main-primary) !important;
+  color:var(--main-color) !important;
+}
+
+
+
+.phone-number-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  gap:15px;
+  direction: ltr;
+}
+
+.phone-number-input {
+  width: 100%;
+  margin: 1rem 0;
+  background-color: var(--main-bg);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+}
+
+.instruction-text {
+  margin-bottom: 1rem;
+  color: #999999;
+  text-align: center;
+}
+
+.dial-pad {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 0.5rem;
+}
+
+.rowinputs {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.dial-pad-key {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--main-bg);
+  color: #ffffff;
+  font-size: 1rem;
+}
+

@@ -1,0 +1,182 @@
+<div class="container">
+  <div class="d-flex align-items-center" style="gap: 10px;" (click)="userChatedInfo.toggle($event);getSelectedUserInfo(selectedUser?.id||'')">
+    <img class="profile-image" [src]="selectedUser?.imageUrl?selectedUser?.imageUrl:'assets/profile1.png'" alt="Profile Image">
+    <p>{{selectedUser?.name}}</p>
+  </div>
+
+  <div class="call_search">
+    <!-- Video, Phone, and Search icons -->
+    <i class="pi pi-video" style="font-size: 1rem; margin-right: 10px;"></i>
+    <i class="pi pi-phone" style="font-size: 1rem; margin-right: 10px;"></i>
+    <i class="pi pi-search" style="font-size: 1rem;" (click)="search
+    .toggle($event)"
+    [ngStyle]="{'background': searchOverlayPanel ? '#2b3748' : 'initial'}"
+    ></i>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<p-overlayPanel #search  (onShow)="searchOverlayPanel = true" (onHide)="searchOverlayPanel = false">
+  <div class="d-flex " style="gap: 20px;padding: 10px;align-items: center;">
+    <input id="name" type="text"  pInputText required />
+    <i class="pi pi-angle-right" style="font-size: 1rem;transform: rotate(-90deg);display: flex;justify-content: center;align-items: center;"></i>
+    <i class="pi pi-angle-right" style="font-size: 1rem;transform: rotate(90deg);display: flex;justify-content: center;align-items: center;"></i>
+    <hr style="border-top: 0;border-left: var(--bs-border-width) solid;height: 20px;">
+    <i class="pi pi-times" style="font-size: 1rem;"    (click)="search.toggle($event)"></i>
+
+  </div>
+</p-overlayPanel>
+
+
+
+
+
+
+
+
+
+
+<!-- OverlayPanel that opens on clicking the profile container -->
+<p-overlayPanel #userChatedInfo>
+  <div class="main-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <ul>
+          <li class="listItem" (click)="setActive('Overview', $event)"
+            [ngStyle]="{'background-color': previousIndex===1 ? '#2b3748' : 'inherit'}"
+            ><i class="pi pi-info-circle"></i> Overview
+            <div class="active-line"
+              [ngStyle]="{'height': previousIndex===1 ? '80%' : 'inherit'}"
+            ></div>
+          </li>
+          <li class="listItem" (click)="setActive('Media', $event)"
+            [ngStyle]="{'background-color': previousIndex===2 ? '#2b3748' : 'inherit'}"
+            ><i class="pi pi-folder"></i> Media
+            <div class="active-line"></div>
+          </li>
+          <li class="listItem" (click)="setActive('Files', $event)"
+            [ngStyle]="{'background-color': previousIndex===3 ? '#2b3748' : 'inherit'}"
+            ><i class="pi pi-file"></i> Files
+            <div class="active-line"></div>
+          </li>
+          <li class="listItem" (click)="setActive('Links', $event)"
+            [ngStyle]="{'background-color': previousIndex===4 ? '#2b3748' : 'inherit'}"
+            ><i class="pi pi-link"></i> Links
+            <div class="active-line"></div>
+        </li>
+          <li class="listItem" (click)="setActive('Encryption', $event)"
+            [ngStyle]="{'background-color': previousIndex===5 ? '#2b3748' : 'inherit'}"
+            ><i class="pi pi-lock"></i> Encryption
+            <div class="active-line"></div>
+          </li>
+          <li class="listItem" (click)="setActive('Groups', $event)"
+            [ngStyle]="{'background-color': previousIndex===6 ? '#2b3748' : 'inherit'}"
+            ><i class="pi pi-users"></i> Groups
+            <div class="active-line"></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Profile Media -->
+    <div *ngIf="previousIndex===1" class="profile-panel">
+      <div class="profile-header">
+        <img class="profile-image" [src]="selectedUser?.imageUrl?selectedUser?.imageUrl:'assets/profile1.png'" alt="Profile Image">
+        <div class="profile-name">
+          <h2>{{selectedUser?.name}}</h2>
+          <p>نهى عبدالله</p>
+        </div>
+      </div>
+
+      <div class="buttons">
+        <p-button icon="pi pi-video" label="Video"></p-button>
+        <p-button icon="pi pi-phone" label="Voice"></p-button>
+      </div>
+
+      <div class="profile-details">
+        <p  style="color: var(--main-color);"><strong  style="color: white;">About:</strong>
+          <br>
+          {{selectedUserInfo?.about}}</p>
+        <p style="color: var(--main-color);"><strong style="color: white;">Phone number:</strong>
+          <br>
+          {{selectedUserInfo?.userName}}</p>
+        <p><strong>Disappearing messages:</strong> 
+          <br>
+          Off</p>
+        <p><strong>Mute notifications:</strong>
+          <br>
+          <p-button icon="pi pi-bell" label="Mute"></p-button>
+        </p>
+        <span><strong>Notification tone:</strong>
+          <br>
+          <div class="d-flex" style="gap: 10px;">
+            <p-button icon="bi bi-play" ></p-button>
+            <p-dropdown 
+            [options]="tones" 
+            [(ngModel)]="selectedTone" 
+            optionLabel="name"
+            placeholder="Select a Tone" />
+            
+
+          </div>
+        </span>
+          <hr>
+          <div class="d-flex " style="gap: 10px;">
+
+            
+            <p-button  label="Block"></p-button>
+            <p-button  label="Report Contact"></p-button>
+
+          </div>
+      </div>
+    </div>
+
+        <!-- Profile overview -->
+    <div *ngIf="previousIndex===2" class="media">
+      <h5>Media</h5>
+
+
+    </div>
+
+
+     <!-- Profile Files -->
+    <div *ngIf="previousIndex===3" class="files">
+      <h5>Files</h5>
+    </div>
+     <!-- Profile Links -->
+    <div *ngIf="previousIndex===4" class="links">
+      <h5>Links</h5>
+
+    </div>
+     <!-- Profile Encryption -->
+    <div *ngIf="previousIndex===5" class="encryption">
+      <h5>Encryption</h5>
+
+    </div>
+     <!-- Profile Groups -->
+    <div *ngIf="previousIndex===6" class="groups">
+      <h5>Groups</h5>
+
+    </div>
+
+
+  </div>
+</p-overlayPanel>
+
+
+
+
+
+
+
+
+
+

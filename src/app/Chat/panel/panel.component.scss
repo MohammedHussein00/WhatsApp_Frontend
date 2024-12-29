@@ -1,0 +1,134 @@
+::ng-deep .p-sidebar .p-sidebar-header{
+  display: none!important;
+}
+
+::ng-deep .p-sidebar .p-sidebar-header + .p-sidebar-content{
+  display: flex;
+}
+::ng-deep .p-sidebar{
+  z-index: 1999;
+}
+
+.icon-content{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+  padding:0 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  min-height: 23px!important;
+  transition: all .3s ease-in-out;
+}
+
+.icon-content:hover{
+  background-color: #2b3748!important;
+}
+
+i,svg{
+  font-size: 17px;
+  padding: 8px 0;
+}
+
+
+::ng-deep .p-menu .p-submenu-header {
+  padding: 0 1.25rem;
+  color: var(--main-color);
+  font-weight: 400;
+}
+
+
+
+
+.app-container {
+  display: flex;
+  background-color: #2C2C2C;
+  color: white;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: var(--main-bg);
+  padding: 15px;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.sidebar ul li:hover {
+  background-color: var(--main-bg-lighter);
+  border-radius: 5px;
+}
+
+.profile-section {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: var(--main-bg-lighter);
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.profile-header h2 {
+  margin: 0;
+}
+
+.profile-details {
+  margin-top: 20px;
+}
+
+.profile-details .about, .profile-details .phone-number {
+  margin-bottom: 15px;
+}
+
+.logout-section {
+  margin-top: 30px;
+}
+
+.logout-info {
+  color: #AAA;
+  font-size: 12px;
+}
+/* panel.component.scss */
+.my-icon {
+  /* Add any additional styles you want here */
+  width: 24px;  /* Ensuring the width matches the size */
+  height: 24px; /* Ensuring the height matches the size */
+}
+
+::ng-deep .p-overlaypanel{
+  z-index: 3000!important;
+}
+::ng-deep .p-overlaypanel .p-overlaypanel-content{
+  padding: 0!important;
+}
+
+
+
+
+
+
+.active-line {
+  position: absolute;
+  left: 2px;  /* Adjust based on sidebar width */
+  top: 0;
+  height: 0;
+  width: 3px;
+  border-radius: 4px;
+  background-color: var(--main-primary);
+  transition: height 0.3s ease-in-out, top 0.3s ease-in-out, bottom 0.3s ease-in-out;
+}
